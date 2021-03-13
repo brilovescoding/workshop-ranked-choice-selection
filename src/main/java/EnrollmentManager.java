@@ -11,6 +11,7 @@ public class EnrollmentManager {
     private ArrayList<Attendee> attendeeList;
     private ArrayList<Workshop> completedWorkshopEnrollment;
 
+
     public EnrollmentManager() {
         workshopList = new ArrayList<Workshop>();
         attendeeList = new ArrayList<Attendee>();
@@ -39,5 +40,23 @@ public class EnrollmentManager {
         return null;
     }
 
+    /*
+    iterate through each Workshop
+    for each workshop, form a list of attendees that have their first preference to be that workshop (may
+    match by IDs)
+
+     */
+    public void selectWorkshopPreferences() {
+
+    }
+
+    //parameter: a pref num that is from 1 - 5
+    //return: ArrayList of attendees that listed that specific workshopID at that specific preference #
+    //Attendees must also be open during that timeslot in order to be added to that list
+    public ArrayList<Attendee> getListOfAttendeesByPreference(int workshopID, int prefNum, char timeSlot) {
+        prefNum--; //to work with array indexes
+
+        return null;
+    }
 
 }
