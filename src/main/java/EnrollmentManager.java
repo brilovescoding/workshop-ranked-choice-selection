@@ -31,6 +31,7 @@ public class EnrollmentManager {
         //order of column in spreadsheet are:
     }
 
+    //important: CSV files should use **TAB SEPARATED VALUES** to avoid issues with commas in Workshop descriptions and lists of moderators/presenters
     public List<String[]> getListFromCSV(String filepath) {
         try {
             CSVReader reader = new CSVReader(new FileReader(filepath));
@@ -41,12 +42,43 @@ public class EnrollmentManager {
     }
 
     /*
+    workshop spreadsheet format should be:
+        Column A: ID
+        Column B: Name
+        Column C: Description
+        Column D: URL
+        Column E, Faculty Moderators (separated by commas)
+        Column F, Presenters (separated by commas)
+        Column G, Type (either TALK or SEMINAR)
+        Column H, Sessions (either A, B, or AB)
+     */
+    public void initializeWorkshopList(List<String[]> workshopData) {
+        WorkshopFactory w = new WorkshopFactory();
+
+        //change comma-separated strings for moderators/presenters into array of Strings
+        for (String[] workshop: workshopData) {
+            workshopList.add(w.makeWorkshop(
+                    Integer.parseInt(workshop[0]),
+                    workshop[1],
+                    workshop[2],
+                    workshop[3],
+                    workshop[4].split("[,]", 0),
+                    workshop[5].split("[,]", 0),
+                    workshop[6],
+                    workshop[7]
+            ));
+        }
+
+
+    }
+
+    /*
     iterate through each Workshop
     for each workshop, form a list of attendees that have their first preference to be that workshop (may
     match by IDs)
 
      */
-    public void selectWorkshopPreferences() {
+    public void selectWorkshopPreferencesForAttendees() {
 
     }
 
@@ -58,5 +90,7 @@ public class EnrollmentManager {
 
         return null;
     }
+
+
 
 }

@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="workshop-ranked-choice-selection" target="13" />
+      <module name="workshop-ranked-choice-selection" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
