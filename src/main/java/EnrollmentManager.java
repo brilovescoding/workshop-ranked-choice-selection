@@ -64,8 +64,8 @@ public class EnrollmentManager {
                     workshop[3],
                     workshop[4].split("[,]", 0),
                     workshop[5].split("[,]", 0),
-                    workshop[6],
-                    workshop[7]
+                    workshop[6].toUpperCase(),
+                    workshop[7].toUpperCase()
             ));
         }
 
