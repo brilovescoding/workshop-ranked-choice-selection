@@ -6,6 +6,8 @@
 
 Files should be imported as Tab-Separated Values files to avoid issues with commas being present in Workshop descriptions.
 
+Workshop names in the TSV file need to match the options in the form given to students.
+
 Workshop spreadsheet format should be:
 - Column A: ID
 - Column B: Name
