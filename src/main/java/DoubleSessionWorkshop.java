@@ -26,10 +26,12 @@ public class DoubleSessionWorkshop extends Workshop {
         s += "Session A: \n";
         for (Attendee a: attendeesA) {
             s += a.toString();
+            s += "\n";
         }
         s += "Session B: \n";
         for (Attendee a: attendeesB) {
             s += a.toString();
+            s += "\n";
         }
         s += "\n";
         return s;

@@ -11,6 +11,9 @@ public class EnrollmentManager {
     private ArrayList<Workshop> workshopList;
     private ArrayList<Attendee> attendeeList;
 
+    public void printAttendees() {
+        System.out.println(attendeeList);
+    }
 
     public EnrollmentManager() {
         workshopList = new ArrayList<Workshop>();
@@ -39,7 +42,7 @@ public class EnrollmentManager {
                     .withSeparator('\t')
                     .build();
             final CSVReader reader = new CSVReaderBuilder(new FileReader(filepath))
-                    .withSkipLines(1)
+                    .withSkipLines(0)
                     .withCSVParser(parser)
                     .build();
             return reader.readAll();
@@ -111,31 +114,44 @@ public class EnrollmentManager {
                 //get the attendees who listed this workshop as the one they wanted
                 //match the name they put for the first item in attendance.workshopPreferences to the
                 //name of the given workshop
-                ArrayList<Attendee> attendees = getListOfAttendeesByPreference(workshop, preferenceLevel);
+                ArrayList<Attendee> attendees;
+
                 if (workshop instanceof SingleSessionWorkshop) {
                     SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
+                    attendees = getListOfAttendeesByPreference(s, preferenceLevel);
                     for (int j = s.getNumberOfAttendees(); j < Workshop.MAX_ATTENDEES; j++) {
-                        Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
-                        s.addAttendee(randomAttendee);
-                        randomAttendee.setWorkshop(workshop, s.getSession());
+                        if (attendees.size() > 0) {
+                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                            s.addAttendee(randomAttendee);
+                            randomAttendee.setWorkshop(workshop, s.getSession());
+                            attendees.remove(randomAttendee);
+                        }
                     }
-                }
-                else if (workshop instanceof DoubleSessionWorkshop) {
+                } else if (workshop instanceof DoubleSessionWorkshop) {
                     DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
                     //first handle Session A
+                    attendees = getListOfAttendeesByPreference(d, preferenceLevel, 'A');
                     for (int j = d.getNumberOfAttendees('A'); j < Workshop.MAX_ATTENDEES; j++) {
-                        Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
-                        d.addAttendee(randomAttendee, 'A');
-                        randomAttendee.setWorkshop(workshop, 'A');
+                        if (attendees.size() > 0) {
+                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                            d.addAttendee(randomAttendee, 'A');
+                            randomAttendee.setWorkshop(workshop, 'A');
+                            attendees.remove(randomAttendee);
+                        }
                     }
 
                     //then Session B
+                    attendees = getListOfAttendeesByPreference(d, preferenceLevel, 'B');
                     for (int j = d.getNumberOfAttendees('B'); j < Workshop.MAX_ATTENDEES; j++) {
-                        Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
-                        d.addAttendee(randomAttendee, 'B');
-                        randomAttendee.setWorkshop(workshop, 'B');
+                        if (attendees.size() > 0) {
+                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                            d.addAttendee(randomAttendee, 'B');
+                            randomAttendee.setWorkshop(workshop, 'B');
+                            attendees.remove(randomAttendee);
+                        }
                     }
                 }
+
             }
         }
     }
@@ -143,7 +159,7 @@ public class EnrollmentManager {
     //parameter: a Workshop and a pref num that is from 1 - 5
     //return: ArrayList of attendees that listed that specific workshopID at that specific preference #
     //Attendees must also be open during that timeslot in order to be added to that list
-    public ArrayList<Attendee> getListOfAttendeesByPreference(Workshop workshop, int prefNum) {
+    public ArrayList<Attendee> getListOfAttendeesByPreference(SingleSessionWorkshop workshop, int prefNum) {
         prefNum--; //for array index
         String workshopName = workshop.getName();
         ArrayList<Attendee> tempList = new ArrayList<Attendee>();
@@ -161,15 +177,31 @@ public class EnrollmentManager {
                         tempList.add(attendee);
                     }
                 }
-                //add Attendee ONCE to the list if they are available for either A or B
-                else if (workshop instanceof DoubleSessionWorkshop) {
-                    if (attendee.getWorkshopA() == null || attendee.getWorkshopB() == null) {
+            }
+        }
+        return tempList;
+    }
+
+    public ArrayList<Attendee> getListOfAttendeesByPreference(DoubleSessionWorkshop workshop, int prefNum, char session) {
+        prefNum--; //for array index
+        String workshopName = workshop.getName();
+        ArrayList<Attendee> tempList = new ArrayList<Attendee>();
+
+        for (Attendee attendee : this.attendeeList){
+            String preference = attendee.getWorkshopPreferences()[prefNum];
+            //check first to see if the name matches
+            if (preference.equals(workshopName)) {
+                if (workshop instanceof DoubleSessionWorkshop) {
+                    if (attendee.getWorkshopA() == null && session == 'A') {
+                        tempList.add(attendee);
+                    }
+                    else if (attendee.getWorkshopB() == null && session == 'B') {
                         tempList.add(attendee);
                     }
                 }
             }
         }
-
+        System.out.println(tempList);
         return tempList;
     }
 

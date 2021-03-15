@@ -20,7 +20,7 @@ public abstract class Workshop {
     }
 
     public String toString() {
-        return "Name: " + name + "\nDescription" + description + "\nURL: " + url + "\nPresenters: " + presenters + "\nModerators" + moderators + "\nType: " + type;
+        return "Name: " + name + "\nDescription: " + description + "\nURL: " + url + "\nPresenters: " + presenters + "\nModerators: " + moderators + "\nType: " + type + "\n";
     }
 
     public int getId() {

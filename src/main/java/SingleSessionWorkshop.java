@@ -24,9 +24,12 @@ public class SingleSessionWorkshop extends Workshop {
 
     public String toString() {
         String s = super.toString();
-        s += "Attendees: \n";
+        s += "Session: ";
+        s += session;
+        s += "\nAttendees: \n";
         for (Attendee a: attendees) {
             s += a.toString();
+            s += "\n";
         }
         s += "\n";
         return s;
