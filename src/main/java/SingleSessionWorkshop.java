@@ -27,9 +27,14 @@ public class SingleSessionWorkshop extends Workshop {
         s += "Session: ";
         s += session;
         s += "\nAttendees: \n";
-        for (Attendee a: attendees) {
-            s += a.toString();
-            s += "\n";
+        if (getNumberOfAttendees()>0) {
+            for (Attendee a : attendees) {
+                s += a.toString();
+                s += "\n";
+            }
+        }
+        else {
+            s += "None";
         }
         s += "\n";
         return s;

@@ -24,14 +24,24 @@ public class DoubleSessionWorkshop extends Workshop {
         String s = super.toString();
         s += "Attendees: \n";
         s += "Session A: \n";
-        for (Attendee a: attendeesA) {
-            s += a.toString();
-            s += "\n";
+        if (getNumberOfAttendees('A') > 0) {
+            for (Attendee a : attendeesA) {
+                s += a.toString();
+                s += "\n";
+            }
+        }
+        else {
+            s += "None\n";
         }
         s += "Session B: \n";
-        for (Attendee a: attendeesB) {
-            s += a.toString();
-            s += "\n";
+        if (getNumberOfAttendees('B') > 0) {
+            for (Attendee a: attendeesB) {
+                s += a.toString();
+                s += "\n";
+            }
+        }
+        else {
+            s += "None\n";
         }
         s += "\n";
         return s;
