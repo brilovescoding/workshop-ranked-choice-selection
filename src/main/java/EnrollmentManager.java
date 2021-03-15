@@ -117,6 +117,7 @@ public class EnrollmentManager {
                     for (int j = s.getNumberOfAttendees(); j < Workshop.MAX_ATTENDEES; j++) {
                         Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                         s.addAttendee(randomAttendee);
+                        randomAttendee.setWorkshop(workshop, s.getSession());
                     }
                 }
                 else if (workshop instanceof DoubleSessionWorkshop) {
@@ -125,15 +126,16 @@ public class EnrollmentManager {
                     for (int j = d.getNumberOfAttendees('A'); j < Workshop.MAX_ATTENDEES; j++) {
                         Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                         d.addAttendee(randomAttendee, 'A');
+                        randomAttendee.setWorkshop(workshop, 'A');
                     }
 
                     //then Session B
                     for (int j = d.getNumberOfAttendees('B'); j < Workshop.MAX_ATTENDEES; j++) {
                         Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                         d.addAttendee(randomAttendee, 'B');
+                        randomAttendee.setWorkshop(workshop, 'B');
                     }
                 }
-
             }
         }
     }

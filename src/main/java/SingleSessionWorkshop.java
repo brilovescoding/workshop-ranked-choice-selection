@@ -15,6 +15,7 @@ public class SingleSessionWorkshop extends Workshop {
     public char getSession() {
         return session;
     }
+
     public void addAttendee(Attendee a) {
         if (a != null) {
             attendees.add(a);

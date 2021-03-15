@@ -42,4 +42,14 @@ public class Attendee {
         return this.name;
     }
 
+    public void setWorkshop(Workshop w, char session) {
+        if (session == 'A') {
+            workshopA = w;
+        }
+        else if (session == 'B') {
+            workshopB = w;
+        }
+
+    }
+
 }
