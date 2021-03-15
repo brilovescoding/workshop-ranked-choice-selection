@@ -20,4 +20,14 @@ public class SingleSessionWorkshop extends Workshop {
             attendees.add(a);
         }
     }
+
+    public String toString() {
+        String s = super.toString();
+        s += "Attendees: \n";
+        for (Attendee a: attendees) {
+            s += a.toString();
+        }
+        s += "\n";
+        return s;
+    }
 }

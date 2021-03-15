@@ -38,4 +38,8 @@ public class Attendee {
         this.workshopPreferences = workshopPreferences;
     }
 
+    public String toString() {
+        return this.name;
+    }
+
 }

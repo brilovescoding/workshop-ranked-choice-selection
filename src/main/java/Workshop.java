@@ -19,6 +19,10 @@ public abstract class Workshop {
         this.type = type;
     }
 
+    public String toString() {
+        return "Name: " + name + "\nDescription" + description + "\nURL: " + url + "\nPresenters: " + presenters + "\nModerators" + moderators + "\nType: " + type;
+    }
+
     public int getId() {
         return id;
     }

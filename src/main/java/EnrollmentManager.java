@@ -10,13 +10,11 @@ public class EnrollmentManager {
 
     private ArrayList<Workshop> workshopList;
     private ArrayList<Attendee> attendeeList;
-    private ArrayList<Workshop> completedWorkshopEnrollment;
 
 
     public EnrollmentManager() {
         workshopList = new ArrayList<Workshop>();
         attendeeList = new ArrayList<Attendee>();
-        completedWorkshopEnrollment = new ArrayList<Workshop>();
     }
 
     //method takes in a filepath, imports the file into a List of String arrays,
@@ -182,7 +180,11 @@ public class EnrollmentManager {
         return null;
     }
 
-
+    public void printWorkshopChoices() {
+        for (Workshop w : workshopList) {
+            System.out.println(w);
+        }
+    }
 
 
 

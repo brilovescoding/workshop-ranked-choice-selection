@@ -19,4 +19,19 @@ public class DoubleSessionWorkshop extends Workshop {
             }
         }
     }
+
+    public String toString() {
+        String s = super.toString();
+        s += "Attendees: \n";
+        s += "Session A: \n";
+        for (Attendee a: attendeesA) {
+            s += a.toString();
+        }
+        s += "Session B: \n";
+        for (Attendee a: attendeesB) {
+            s += a.toString();
+        }
+        s += "\n";
+        return s;
+    }
 }
