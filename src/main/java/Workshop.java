@@ -7,7 +7,7 @@ public abstract class Workshop {
     private String presenters;
     private String type;
 
-    private static final int MAX_ATTENDEES = 15;
+    public static final int MAX_ATTENDEES = 15;
 
     public Workshop(int id, String name, String description, String url, String moderators, String presenters, String type) {
         this.id = id;
@@ -17,5 +17,33 @@ public abstract class Workshop {
         this.moderators = moderators;
         this.presenters = presenters;
         this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getModerators() {
+        return moderators;
+    }
+
+    public String getPresenters() {
+        return presenters;
+    }
+
+    public String getType() {
+        return type;
     }
 }

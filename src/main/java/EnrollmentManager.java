@@ -1,6 +1,7 @@
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.opencsv.*;
 
@@ -70,8 +71,8 @@ public class EnrollmentManager {
                     workshopRow[1],
                     workshopRow[2],
                     workshopRow[3],
-                    workshopRow[4].split("[,]", 0),
-                    workshopRow[5].split("[,]", 0),
+                    workshopRow[4],
+                    workshopRow[5],
                     workshopRow[6].toUpperCase(),
                     workshopRow[7].toUpperCase()
             ));
@@ -101,19 +102,87 @@ public class EnrollmentManager {
     for each workshop, form a list of attendees that have their first preference to be that workshop (may
     match by IDs)
 
+    push to Workshop
      */
     public void selectWorkshopPreferencesForAttendees() {
 
+        //for each preference level
+        for (int i = 1; i <= 5; i++) {
+            //for each workshop, place each preference level in turn
+            for (Workshop workshop : workshopList) {
+                //get the attendees who listed this workshop as the one they wanted
+                //match the name they put for the first item in attendance.workshopPreferences to the
+                //name of the given workshop
+                ArrayList<Attendee> attendees = getListOfAttendeesByPreference(workshop, i);
+                if (workshop instanceof SingleSessionWorkshop) {
+                    SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
+                    for (int j = 0; i < Workshop.MAX_ATTENDEES; i++) {
+                        Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                        s.addAttendee(randomAttendee);
+                    }
+                }
+                else if (workshop instanceof DoubleSessionWorkshop) {
+                    DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
+                    //first handle Session A
+                    for (int j = 0; j < Workshop.MAX_ATTENDEES; j++) {
+                        Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                        d.addAttendee(randomAttendee, 'A');
+                    }
+
+                    //then Session B
+                    for (int j = 0; j < Workshop.MAX_ATTENDEES; j++) {
+                        Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                        d.addAttendee(randomAttendee, 'B');
+                    }
+                }
+
+            }
+        }
     }
 
-    //parameter: a pref num that is from 1 - 5
+    //parameter: a Workshop and a pref num that is from 1 - 5
     //return: ArrayList of attendees that listed that specific workshopID at that specific preference #
     //Attendees must also be open during that timeslot in order to be added to that list
-    public ArrayList<Attendee> getListOfAttendeesByPreference(int workshopID, int prefNum, char timeSlot) {
-        prefNum--; //to work with array indexes
+    public ArrayList<Attendee> getListOfAttendeesByPreference(Workshop workshop, int prefNum) {
+        prefNum--; //for array index
+        String workshopName = workshop.getName();
+        ArrayList<Attendee> tempList = new ArrayList<Attendee>();
 
+        for (Attendee attendee : this.attendeeList){
+            String preference = attendee.getWorkshopPreferences()[prefNum];
+            //check first to see if the name matches
+            if (preference.equals(workshopName)) {
+                //if single session, check if student is available for that session
+                if (workshop instanceof SingleSessionWorkshop) {
+                    SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
+                    if (s.getSession() == 'A' && attendee.getWorkshopA() == null) {
+                        tempList.add(attendee);
+                    } else if (s.getSession() == 'B' && attendee.getWorkshopB() == null) {
+                        tempList.add(attendee);
+                    }
+                }
+                //add Attendee ONCE to the list if they are available for either A or B
+                else if (workshop instanceof DoubleSessionWorkshop) {
+                    DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
+                    if (attendee.getWorkshopA() == null || attendee.getWorkshopB() == null) {
+                        tempList.add(attendee);
+                    }
+                }
+            }
+        }
+
+        return tempList;
+    }
+
+    public Workshop getWorkshopByName(String name) {
+        for (Workshop workshop : workshopList) {
+            if (workshop.getName().equals(name))
+                return workshop;
+        }
         return null;
     }
+
+
 
 
 

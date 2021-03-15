@@ -9,4 +9,14 @@ public class DoubleSessionWorkshop extends Workshop {
         attendeesA = new ArrayList<Attendee>();
         attendeesB = new ArrayList<Attendee>();
     }
+
+    public void addAttendee(Attendee a, char session) {
+        if (a != null) {
+            if (session == 'A') {
+                attendeesA.add(a);
+            } else if (session == 'B') {
+                attendeesB.add(a);
+            }
+        }
+    }
 }
