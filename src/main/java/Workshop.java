@@ -31,23 +31,4 @@ public abstract class Workshop {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getModerators() {
-        return moderators;
-    }
-
-    public String getPresenters() {
-        return presenters;
-    }
-
-    public String getType() {
-        return type;
-    }
 }

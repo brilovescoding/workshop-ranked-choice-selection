@@ -34,4 +34,11 @@ public class DoubleSessionWorkshop extends Workshop {
         s += "\n";
         return s;
     }
+
+    public int getNumberOfAttendees(char session) {
+        if (session == 'A') { return attendeesA.size(); }
+        else if (session == 'B') { return attendeesB.size(); }
+
+        return -1;
+    }
 }

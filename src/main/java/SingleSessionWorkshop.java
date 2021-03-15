@@ -30,4 +30,8 @@ public class SingleSessionWorkshop extends Workshop {
         s += "\n";
         return s;
     }
+
+    public int getNumberOfAttendees() {
+        return attendees.size();
+    }
 }

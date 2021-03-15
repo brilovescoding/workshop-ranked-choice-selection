@@ -105,16 +105,16 @@ public class EnrollmentManager {
     public void selectWorkshopPreferencesForAttendees() {
 
         //for each preference level
-        for (int i = 1; i <= 5; i++) {
+        for (int preferenceLevel = 1; preferenceLevel <= 5; preferenceLevel++) {
             //for each workshop, place each preference level in turn
             for (Workshop workshop : workshopList) {
                 //get the attendees who listed this workshop as the one they wanted
                 //match the name they put for the first item in attendance.workshopPreferences to the
                 //name of the given workshop
-                ArrayList<Attendee> attendees = getListOfAttendeesByPreference(workshop, i);
+                ArrayList<Attendee> attendees = getListOfAttendeesByPreference(workshop, preferenceLevel);
                 if (workshop instanceof SingleSessionWorkshop) {
                     SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
-                    for (int j = 0; i < Workshop.MAX_ATTENDEES; i++) {
+                    for (int j = s.getNumberOfAttendees(); j < Workshop.MAX_ATTENDEES; j++) {
                         Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                         s.addAttendee(randomAttendee);
                     }
@@ -122,13 +122,13 @@ public class EnrollmentManager {
                 else if (workshop instanceof DoubleSessionWorkshop) {
                     DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
                     //first handle Session A
-                    for (int j = 0; j < Workshop.MAX_ATTENDEES; j++) {
+                    for (int j = d.getNumberOfAttendees('A'); j < Workshop.MAX_ATTENDEES; j++) {
                         Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                         d.addAttendee(randomAttendee, 'A');
                     }
 
                     //then Session B
-                    for (int j = 0; j < Workshop.MAX_ATTENDEES; j++) {
+                    for (int j = d.getNumberOfAttendees('B'); j < Workshop.MAX_ATTENDEES; j++) {
                         Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                         d.addAttendee(randomAttendee, 'B');
                     }
@@ -161,7 +161,6 @@ public class EnrollmentManager {
                 }
                 //add Attendee ONCE to the list if they are available for either A or B
                 else if (workshop instanceof DoubleSessionWorkshop) {
-                    DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
                     if (attendee.getWorkshopA() == null || attendee.getWorkshopB() == null) {
                         tempList.add(attendee);
                     }
