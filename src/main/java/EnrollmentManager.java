@@ -25,16 +25,24 @@ public class EnrollmentManager {
         List<String[]> workshopData = getListFromCSV(workshopCSVFilePath);
         List<String[]> attendeeData = getListFromCSV(attendeeCSVFilePath);
 
-        //loop through attendee data, instantiate objects for each attendee
-
         //loop through workshopData; instantiate objects for workshopList
-        //order of column in spreadsheet are:
+        initializeWorkshopList(workshopData);
+
+        //loop through attendeeData, instantiate objects for each attendee
+        initializeAttendeeList(attendeeData);
+
     }
 
     //important: CSV files should use **TAB SEPARATED VALUES** to avoid issues with commas in Workshop descriptions and lists of moderators/presenters
     public List<String[]> getListFromCSV(String filepath) {
         try {
-            CSVReader reader = new CSVReader(new FileReader(filepath));
+            final CSVParser parser = new CSVParserBuilder()
+                    .withSeparator('\t')
+                    .build();
+            final CSVReader reader = new CSVReaderBuilder(new FileReader(filepath))
+                    .withSkipLines(1)
+                    .withCSVParser(parser)
+                    .build();
             return reader.readAll();
         } catch (Exception e) { System.out.println("Error reading in file."); }
 
@@ -56,20 +64,36 @@ public class EnrollmentManager {
         WorkshopFactory w = new WorkshopFactory();
 
         //change comma-separated strings for moderators/presenters into array of Strings
-        for (String[] workshop: workshopData) {
+        for (String[] workshopRow: workshopData) {
             workshopList.add(w.makeWorkshop(
-                    Integer.parseInt(workshop[0]),
-                    workshop[1],
-                    workshop[2],
-                    workshop[3],
-                    workshop[4].split("[,]", 0),
-                    workshop[5].split("[,]", 0),
-                    workshop[6].toUpperCase(),
-                    workshop[7].toUpperCase()
+                    Integer.parseInt(workshopRow[0]),
+                    workshopRow[1],
+                    workshopRow[2],
+                    workshopRow[3],
+                    workshopRow[4].split("[,]", 0),
+                    workshopRow[5].split("[,]", 0),
+                    workshopRow[6].toUpperCase(),
+                    workshopRow[7].toUpperCase()
             ));
         }
+    }
 
+    /* Data should be organized as follows:
+    Column A: Name
+    Column B: Grade
+    Column C: Email Address
+    Columns D-H: 1st-5th preferences
 
+     */
+    public void initializeAttendeeList(List<String[]> attendeeData) {
+        for (String[] attendeeRow: attendeeData) {
+            attendeeList.add(new Attendee(
+                    attendeeRow[0],
+                    Integer.parseInt(attendeeRow[1]),
+                    attendeeRow[2],
+                    new String[] {attendeeRow[3], attendeeRow[4], attendeeRow[5], attendeeRow[6]}
+            ));
+        }
     }
 
     /*
