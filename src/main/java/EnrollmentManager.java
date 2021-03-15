@@ -192,10 +192,10 @@ public class EnrollmentManager {
             //check first to see if the name matches
             if (preference.equals(workshopName)) {
                 if (workshop instanceof DoubleSessionWorkshop) {
-                    if (attendee.getWorkshopA() == null && session == 'A') {
+                    if (attendee.getWorkshopA() == null && session == 'A' && attendee.getWorkshopB() != workshop) {
                         tempList.add(attendee);
                     }
-                    else if (attendee.getWorkshopB() == null && session == 'B') {
+                    else if (attendee.getWorkshopB() == null && session == 'B' && attendee.getWorkshopA() != workshop) {
                         tempList.add(attendee);
                     }
                 }
