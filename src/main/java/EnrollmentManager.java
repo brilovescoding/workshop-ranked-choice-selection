@@ -182,6 +182,8 @@ public class EnrollmentManager {
         return tempList;
     }
 
+    //overloaded version of above method that works for Double Session workshops, which
+    //helps to avoid issues of double booking individuals for both Session A and Session B
     public ArrayList<Attendee> getListOfAttendeesByPreference(DoubleSessionWorkshop workshop, int prefNum, char session) {
         prefNum--; //for array index
         String workshopName = workshop.getName();
@@ -192,6 +194,7 @@ public class EnrollmentManager {
             //check first to see if the name matches
             if (preference.equals(workshopName)) {
                 if (workshop instanceof DoubleSessionWorkshop) {
+                    //ensures they are available and they aren't already booked for the same workshop in another session
                     if (attendee.getWorkshopA() == null && session == 'A' && attendee.getWorkshopB() != workshop) {
                         tempList.add(attendee);
                     }
@@ -201,7 +204,6 @@ public class EnrollmentManager {
                 }
             }
         }
-        System.out.println(tempList);
         return tempList;
     }
 
