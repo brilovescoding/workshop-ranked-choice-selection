@@ -1,8 +1,6 @@
 public class WorkshopFactory {
 
-    public WorkshopFactory() {
-
-    }
+    public WorkshopFactory() { }
 
     public Workshop makeWorkshop(int id, String name, String description, String url, String[] moderators, String[] presenters, String type, String sessions) {
         if (sessions.equals("A") || sessions.equals("B")) {

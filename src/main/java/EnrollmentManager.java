@@ -91,7 +91,7 @@ public class EnrollmentManager {
                     attendeeRow[0],
                     Integer.parseInt(attendeeRow[1]),
                     attendeeRow[2],
-                    new String[] {attendeeRow[3], attendeeRow[4], attendeeRow[5], attendeeRow[6]}
+                    new String[] {attendeeRow[3], attendeeRow[4], attendeeRow[5], attendeeRow[6], attendeeRow[7]}
             ));
         }
     }

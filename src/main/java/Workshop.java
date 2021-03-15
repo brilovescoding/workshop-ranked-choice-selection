@@ -3,13 +3,13 @@ public abstract class Workshop {
     private String name;
     private String description;
     private String url;
-    private String[] moderators;
-    private String[] presenters;
+    private String moderators;
+    private String presenters;
     private String type;
 
     private static final int MAX_ATTENDEES = 15;
 
-    public Workshop(int id, String name, String description, String url, String[] moderators, String[] presenters, String type) {
+    public Workshop(int id, String name, String description, String url, String moderators, String presenters, String type) {
         this.id = id;
         this.name = name;
         this.description = description;
