@@ -227,8 +227,8 @@ public class EnrollmentManager {
     //Column A: Email Address
     //Column B: Attendee Name
     //Column C: Attendee Grade
-    //Column D: Attendee's Workshop A name and information (use toString())
-    //Column E: Attendee's Workshop B name and information (use toString())
+    //Column D: Attendee's Workshop A name and URL
+    //Column E: Attendee's Workshop B name and URL
     public void convertAttendeeDataToCSV() throws Exception {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
         for (Attendee attendee : attendeeList) {

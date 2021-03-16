@@ -24,6 +24,13 @@ Workshop spreadsheet format should be:
 - Column G, Type (either TALK or SEMINAR)
 - Column H, Sessions (either A, B, or AB)
 
+The resultant spreadsheet, a list of attendees, will be formatted as follows:
+- Column A: Email Address
+- Column B: Attendee Name
+- Column C: Attendee Grade
+- Column D: Attendee's Workshop A name and URL
+- Column E: Attendee's Workshop B name and URL
+
 ## TODO
 
 - ~~Change CSVReader to CSVReaderBuilder so that TSV files are supported (see https://sourceforge.net/p/opencsv/bugs/205/)~~
