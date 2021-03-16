@@ -52,4 +52,15 @@ public class Attendee {
 
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 }

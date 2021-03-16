@@ -4,6 +4,11 @@ public class Main {
         e.importData("data/workshops.tsv", "data/attendees2.tsv"); //file names here
         e.selectWorkshopPreferencesForAttendees();
         e.printWorkshopChoices();
+        try {
+            e.convertAttendeeDataToCSV();
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
     }
 
 }

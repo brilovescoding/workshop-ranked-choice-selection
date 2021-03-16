@@ -31,4 +31,7 @@ public abstract class Workshop {
         return name;
     }
 
+    public String getUrl() {
+        return url;
+    }
 }

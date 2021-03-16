@@ -1,4 +1,5 @@
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -219,6 +220,43 @@ public class EnrollmentManager {
         for (Workshop w : workshopList) {
             System.out.println(w);
         }
+    }
+
+    //Attendee data should be turned into a spreadsheet
+    //The following columns will be used:
+    //Column A: Email Address
+    //Column B: Attendee Name
+    //Column C: Attendee Grade
+    //Column D: Attendee's Workshop A name and information (use toString())
+    //Column E: Attendee's Workshop B name and information (use toString())
+    public void convertAttendeeDataToCSV() throws Exception {
+        List<String[]> attendeeFinalData = new ArrayList<String[]>();
+        for (Attendee attendee : attendeeList) {
+            String[] dataRow = {
+                    attendee.getEmailAddress(),
+                    attendee.getName(),
+                    Integer.toString(attendee.getGrade()),
+                    attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")",
+                    attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")",
+            };
+            attendeeFinalData.add(dataRow);
+        }
+
+        //convert list of Attendees to a list of Strings
+        String filePath = "data/result.csv";
+        FileWriter writer = new FileWriter(filePath);
+        CSVParser parser = new CSVParserBuilder().build();
+        ICSVWriter csvParserWriter = new CSVWriterBuilder(writer)
+                .withParser(parser)
+                .withLineEnd(ICSVWriter.RFC4180_LINE_END)
+                .build(); // will produce a CSVParserWriter
+
+        ICSVWriter csvWriter = new CSVWriterBuilder(writer)
+                .build(); // will produce a CSVWriter
+
+
+        csvWriter.writeAll(attendeeFinalData);
+        csvWriter.close();
     }
 
 
