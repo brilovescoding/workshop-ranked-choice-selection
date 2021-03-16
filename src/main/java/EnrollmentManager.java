@@ -247,7 +247,6 @@ public class EnrollmentManager {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
 
         for (Attendee attendee : scheduledAttendees) {
-            System.out.println("looping...");
             String[] dataRow = {
                     attendee.getEmailAddress(),
                     attendee.getName(),
@@ -255,9 +254,7 @@ public class EnrollmentManager {
                     attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")",
                     attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")",
             };
-            System.out.println("About to add");
             attendeeFinalData.add(dataRow);
-            System.out.println("added");
 
         }
 
