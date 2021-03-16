@@ -11,6 +11,7 @@ public class EnrollmentManager {
 
     private ArrayList<Workshop> workshopList;
     private ArrayList<Attendee> attendeeList;
+    private ArrayList<Attendee> scheduledAttendees;
 
     public void printAttendees() {
         System.out.println(attendeeList);
@@ -19,6 +20,7 @@ public class EnrollmentManager {
     public EnrollmentManager() {
         workshopList = new ArrayList<Workshop>();
         attendeeList = new ArrayList<Attendee>();
+        scheduledAttendees = new ArrayList<Attendee>();
     }
 
     //method takes in a filepath, imports the file into a List of String arrays,
@@ -107,7 +109,6 @@ public class EnrollmentManager {
     push to Workshop
      */
     public void selectWorkshopPreferencesForAttendees() {
-
         //for each preference level
         for (int preferenceLevel = 1; preferenceLevel <= 5; preferenceLevel++) {
             //for each workshop, place each preference level in turn
@@ -126,6 +127,10 @@ public class EnrollmentManager {
                             s.addAttendee(randomAttendee);
                             randomAttendee.setWorkshop(workshop, s.getSession());
                             attendees.remove(randomAttendee);
+                            //if scheduled for both sessions, remove the attendee
+                            if (!randomAttendee.isAvailable()) {
+                                scheduledAttendees.add(randomAttendee);
+                            }
                         }
                     }
                 } else if (workshop instanceof DoubleSessionWorkshop) {
@@ -138,6 +143,8 @@ public class EnrollmentManager {
                             d.addAttendee(randomAttendee, 'A');
                             randomAttendee.setWorkshop(workshop, 'A');
                             attendees.remove(randomAttendee);
+                            if (!randomAttendee.isAvailable()) {
+                                scheduledAttendees.add(randomAttendee);                            }
                         }
                     }
 
@@ -149,12 +156,19 @@ public class EnrollmentManager {
                             d.addAttendee(randomAttendee, 'B');
                             randomAttendee.setWorkshop(workshop, 'B');
                             attendees.remove(randomAttendee);
+                            if (!randomAttendee.isAvailable()) {
+                                scheduledAttendees.add(randomAttendee);                            }
                         }
                     }
                 }
 
             }
         }
+
+        //find who is left over
+        ArrayList<Attendee> leftovers = (ArrayList<Attendee>) Helpers.difference(attendeeList, scheduledAttendees);
+        System.out.println("Leftovers: ");
+        System.out.println(leftovers);
     }
 
     //parameter: a Workshop and a pref num that is from 1 - 5
@@ -231,7 +245,9 @@ public class EnrollmentManager {
     //Column E: Attendee's Workshop B name and URL
     public void convertAttendeeDataToCSV() throws Exception {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
-        for (Attendee attendee : attendeeList) {
+
+        for (Attendee attendee : scheduledAttendees) {
+            System.out.println("looping...");
             String[] dataRow = {
                     attendee.getEmailAddress(),
                     attendee.getName(),
@@ -239,7 +255,10 @@ public class EnrollmentManager {
                     attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")",
                     attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")",
             };
+            System.out.println("About to add");
             attendeeFinalData.add(dataRow);
+            System.out.println("added");
+
         }
 
         //convert list of Attendees to a list of Strings
@@ -253,6 +272,7 @@ public class EnrollmentManager {
 
         ICSVWriter csvWriter = new CSVWriterBuilder(writer)
                 .withSeparator('\t')
+                .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
                 .build(); // will produce a CSVWriter
 
 
@@ -263,3 +283,4 @@ public class EnrollmentManager {
 
 
 }
+

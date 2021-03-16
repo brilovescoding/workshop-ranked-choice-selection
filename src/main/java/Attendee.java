@@ -63,4 +63,11 @@ public class Attendee {
     public String getEmailAddress() {
         return emailAddress;
     }
+
+    public boolean isAvailable() {
+        if (workshopA == null || workshopB == null) {
+            return true;
+        }
+        return false;
+    }
 }
