@@ -243,7 +243,7 @@ public class EnrollmentManager {
         }
 
         //convert list of Attendees to a list of Strings
-        String filePath = "data/result.csv";
+        String filePath = "data/result.tsv";
         FileWriter writer = new FileWriter(filePath);
         CSVParser parser = new CSVParserBuilder().build();
         ICSVWriter csvParserWriter = new CSVWriterBuilder(writer)
@@ -252,6 +252,7 @@ public class EnrollmentManager {
                 .build(); // will produce a CSVParserWriter
 
         ICSVWriter csvWriter = new CSVWriterBuilder(writer)
+                .withSeparator('\t')
                 .build(); // will produce a CSVWriter
 
 
