@@ -1,6 +1,7 @@
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -167,8 +168,21 @@ public class EnrollmentManager {
 
         //find who is left over
         ArrayList<Attendee> leftovers = (ArrayList<Attendee>) Helpers.difference(attendeeList, scheduledAttendees);
-        System.out.println("Leftovers: ");
-        System.out.println(leftovers);
+        System.out.println("Number of LeftOvers: " + leftovers.size());
+        for (Attendee person: leftovers) {
+            System.out.println(person.getName());
+            if (person.getWorkshopA() != null)
+                System.out.println(person.getWorkshopA().getName());
+            else
+                System.out.println("Nothing for workshop A");
+            if (person.getWorkshopB() != null)
+                System.out.println(person.getWorkshopB().getName());
+            else
+                System.out.println("Nothing for workshop B");
+            System.out.println(Arrays.toString(person.getWorkshopPreferences()));
+            System.out.println();
+        }
+
     }
 
     //parameter: a Workshop and a pref num that is from 1 - 5

@@ -7,7 +7,7 @@ public abstract class Workshop {
     private String presenters;
     private String type;
 
-    public static final int MAX_ATTENDEES = 20;
+    public static final int MAX_ATTENDEES = 25;
 
     public Workshop(int id, String name, String description, String url, String moderators, String presenters, String type) {
         this.id = id;
