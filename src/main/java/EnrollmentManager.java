@@ -122,7 +122,7 @@ public class EnrollmentManager {
                 if (workshop instanceof SingleSessionWorkshop) {
                     SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
                     attendees = getListOfAttendeesByPreference(s, preferenceLevel);
-                    for (int j = s.getNumberOfAttendees(); j < Workshop.MAX_ATTENDEES; j++) {
+                    for (int j = s.getNumberOfAttendees(); j < s.getMaxAttendance(); j++) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                             s.addAttendee(randomAttendee);
@@ -138,7 +138,7 @@ public class EnrollmentManager {
                     DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
                     //first handle Session A
                     attendees = getListOfAttendeesByPreference(d, preferenceLevel, 'A');
-                    for (int j = d.getNumberOfAttendees('A'); j < Workshop.MAX_ATTENDEES; j++) {
+                    for (int j = d.getNumberOfAttendees('A'); j < d.getMaxAttendance(); j++) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                             d.addAttendee(randomAttendee, 'A');
@@ -151,7 +151,7 @@ public class EnrollmentManager {
 
                     //then Session B
                     attendees = getListOfAttendeesByPreference(d, preferenceLevel, 'B');
-                    for (int j = d.getNumberOfAttendees('B'); j < Workshop.MAX_ATTENDEES; j++) {
+                    for (int j = d.getNumberOfAttendees('B'); j < d.getMaxAttendance(); j++) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                             d.addAttendee(randomAttendee, 'B');
