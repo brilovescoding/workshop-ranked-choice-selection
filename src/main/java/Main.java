@@ -6,6 +6,8 @@ public class Main {
         e.printWorkshopChoices();
         try {
             e.convertAttendeeDataToCSV();
+            e.convertWorkshopDataToCSV();
+            e.convertLeftoverDataToCSV();
         } catch (Exception exception) {
             System.out.println(exception);
         }

@@ -18,7 +18,7 @@ public abstract class Workshop {
         this.moderators = moderators;
         this.presenters = presenters;
         this.type = type;
-        System.out.println(type);
+
         if (this.type.equals("TALK")) {
             maxAttendance = MAX_ATTENDEES_TALK;
         }
@@ -47,5 +47,13 @@ public abstract class Workshop {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getModerators() {
+        return moderators;
+    }
+
+    public String getPresenters() {
+        return presenters;
     }
 }

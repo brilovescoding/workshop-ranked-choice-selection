@@ -22,6 +22,10 @@ public class SingleSessionWorkshop extends Workshop {
         }
     }
 
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+
     public String toString() {
         String s = super.toString();
         s += "Session: ";

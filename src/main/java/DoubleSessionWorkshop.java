@@ -20,6 +20,13 @@ public class DoubleSessionWorkshop extends Workshop {
         }
     }
 
+    public ArrayList<Attendee> getAttendees(char session) {
+        if (session == 'A') {
+            return attendeesA;
+        }
+        return attendeesB;
+    }
+
     public String toString() {
         String s = super.toString();
         s += "Attendees: \n";

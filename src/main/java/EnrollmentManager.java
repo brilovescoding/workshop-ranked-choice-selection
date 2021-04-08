@@ -13,15 +13,21 @@ public class EnrollmentManager {
     private ArrayList<Workshop> workshopList;
     private ArrayList<Attendee> attendeeList;
     private ArrayList<Attendee> scheduledAttendees;
+    private ArrayList<Attendee> leftovers;
 
     public void printAttendees() {
         System.out.println(attendeeList);
+    }
+
+    public ArrayList<Attendee> getLeftovers() {
+        return leftovers;
     }
 
     public EnrollmentManager() {
         workshopList = new ArrayList<Workshop>();
         attendeeList = new ArrayList<Attendee>();
         scheduledAttendees = new ArrayList<Attendee>();
+        leftovers = new ArrayList<Attendee>();
     }
 
     //method takes in a filepath, imports the file into a List of String arrays,
@@ -174,7 +180,6 @@ public class EnrollmentManager {
 
         //get entire list of attendees, check each of them to see if they have an opening
         //use the method isAvailable to check for this
-        ArrayList<Attendee> leftovers = new ArrayList<Attendee>();
 
         for (Attendee person: attendeeList) {
             if (person.isAvailable()) {
@@ -305,7 +310,144 @@ public class EnrollmentManager {
         csvWriter.close();
     }
 
+    //Workshop data should be turned into a spreadsheet for attendance purposes
+    //Two separate columns should occur for both A and B sessions
+    //The following columns will be used:
+    //Column A: Email Address of Moderator
+    //Column B: Workshop Name
+    //Column C: Workshop URL
+    //Column D: Presenter
+    //Column E: Workshop Session A Attendees String
+    //Column F: Workshop Session A Attendance #
+    //Column G: Workshop Session B Attendees String
+    //Column H: Workshop Session B Attendance #
+    public void convertWorkshopDataToCSV() throws Exception {
+        List<String[]> workshopFinalData = new ArrayList<String[]>();
+
+        for (Workshop workshop : workshopList) {
+            String workshopA = "";
+            String workshopB = "";
+            int attendanceA = 0, attendanceB = 0;
+            if (workshop instanceof SingleSessionWorkshop) {
+                SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
+                ArrayList<Attendee> attendeeList = s.getAttendees();
+                if (s.getSession() == 'A') {
+                    attendanceA = attendeeList.size();
+                }
+                else {
+                    attendanceB = attendeeList.size();
+                }
+                for (Attendee a : attendeeList) {
+                    if (s.getSession() == 'A') {
+                        workshopA += a.getName();
+                        workshopA += ",";
+                    }
+                    else if (s.getSession() == 'B') {
+                        workshopB += a.getName();
+                        workshopB += ", ";
+                    }
+                    else {
+                        System.out.println("Something went wrong...");
+
+                    }
+                }
+            }
+            else if (workshop instanceof DoubleSessionWorkshop) {
+                DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
+                ArrayList<Attendee> attendeeListA = d.getAttendees('A');
+                ArrayList<Attendee> attendeeListB = d.getAttendees('B');
+                attendanceA = attendeeListA.size();
+                attendanceB = attendeeListB.size();
+                for (Attendee a : attendeeListA) {
+                    workshopA += a.getName();
+                    workshopA += ", ";
+                }
+                for (Attendee a : attendeeListB) {
+                    workshopB += a.getName();
+                    workshopB += ", ";
+                }
+
+            }
+            String[] dataRow = {
+                    workshop.getModerators(),
+                    workshop.getName(),
+                    workshop.getUrl(),
+                    workshop.getPresenters(),
+                    workshopA,
+                    String.valueOf(attendanceA),
+                    workshopB,
+                    String.valueOf(attendanceB)
+            };
+            workshopFinalData.add(dataRow);
+
+        }
+
+        //convert list of Attendees to a list of Strings
+        String filePath = "data/workshopresults.tsv";
+        FileWriter writer = new FileWriter(filePath);
+        CSVParser parser = new CSVParserBuilder().build();
+        ICSVWriter csvParserWriter = new CSVWriterBuilder(writer)
+                .withParser(parser)
+                .withLineEnd(ICSVWriter.RFC4180_LINE_END)
+                .build(); // will produce a CSVParserWriter
+
+        ICSVWriter csvWriter = new CSVWriterBuilder(writer)
+                .withSeparator('\t')
+                .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
+                .build(); // will produce a CSVWriter
 
 
+        csvWriter.writeAll(workshopFinalData);
+        csvWriter.close();
+    }
+
+    //Attendee data should be turned into a spreadsheet
+    //The following columns will be used:
+    //Column A: Email Address
+    //Column B: Attendee Name
+    //Column C: Attendee Grade
+    //Column D: Attendee's Workshop A name and URL
+    //Column E: Attendee's Workshop B name and URL
+    public void convertLeftoverDataToCSV() throws Exception {
+        List<String[]> attendeeFinalData = new ArrayList<String[]>();
+
+        for (Attendee attendee : leftovers) {
+            String workshopAInfo = "", workshopBInfo = "";
+            if (attendee.getWorkshopA() != null) {
+                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")";
+            }
+            if (attendee.getWorkshopB() != null) {
+                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")";
+
+            }
+            String[] dataRow = {
+                    attendee.getEmailAddress(),
+                    attendee.getName(),
+                    Integer.toString(attendee.getGrade()),
+                    workshopAInfo,
+                    workshopBInfo
+            };
+            attendeeFinalData.add(dataRow);
+
+        }
+
+        //convert list of Attendees to a list of Strings
+        String filePath = "data/leftovers.tsv";
+        FileWriter writer = new FileWriter(filePath);
+        CSVParser parser = new CSVParserBuilder().build();
+        ICSVWriter csvParserWriter = new CSVWriterBuilder(writer)
+                .withParser(parser)
+                .withLineEnd(ICSVWriter.RFC4180_LINE_END)
+                .build(); // will produce a CSVParserWriter
+
+        ICSVWriter csvWriter = new CSVWriterBuilder(writer)
+                .withSeparator('\t')
+                .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
+                .build(); // will produce a CSVWriter
+
+
+        csvWriter.writeAll(attendeeFinalData);
+        csvWriter.close();
+    }
 }
 
