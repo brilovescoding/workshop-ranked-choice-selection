@@ -18,11 +18,15 @@ public abstract class Workshop {
         this.moderators = moderators;
         this.presenters = presenters;
         this.type = type;
-        if (this.type == "TALK") {
+        System.out.println(type);
+        if (this.type.equals("TALK")) {
             maxAttendance = MAX_ATTENDEES_TALK;
         }
-        else if (this.type == "SEMINAR"){
+        else if (this.type.equals("SEMINAR")){
             maxAttendance = MAX_ATTENDEES_SEMINAR;
+        }
+        else {
+            System.out.println("Error, person is not getting max Attendance set properly");
         }
     }
 

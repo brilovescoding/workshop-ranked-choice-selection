@@ -166,8 +166,22 @@ public class EnrollmentManager {
             }
         }
 
-        //find who is left over
-        ArrayList<Attendee> leftovers = (ArrayList<Attendee>) Helpers.difference(attendeeList, scheduledAttendees);
+        //gets individuals who got scheduled for no workshops,
+        // i.e. aren't present in the scheduledAttendees list
+        //this creates an issue as people with only one workshop aren't included
+        //ArrayList<Attendee> leftovers = (ArrayList<Attendee>) Helpers.difference(attendeeList, scheduledAttendees);
+
+
+        //get entire list of attendees, check each of them to see if they have an opening
+        //use the method isAvailable to check for this
+        ArrayList<Attendee> leftovers = new ArrayList<Attendee>();
+
+        for (Attendee person: attendeeList) {
+            if (person.isAvailable()) {
+                leftovers.add(person);
+            }
+        }
+
         System.out.println("Number of LeftOvers: " + leftovers.size());
         for (Attendee person: leftovers) {
             System.out.println(person.getName());
