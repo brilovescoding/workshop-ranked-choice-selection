@@ -10,7 +10,7 @@ import com.opencsv.*;
 //class will contain methods for importing attendance and workshop data
 public class EnrollmentManager {
 
-    private ArrayList<Workshop> workshopList;
+    private static ArrayList<Workshop> workshopList;
     private ArrayList<Attendee> attendeeList;
     private ArrayList<Attendee> scheduledAttendees;
     private ArrayList<Attendee> leftovers;
@@ -29,6 +29,24 @@ public class EnrollmentManager {
         scheduledAttendees = new ArrayList<Attendee>();
         leftovers = new ArrayList<Attendee>();
     }
+
+    //gets lowest attended workshop from the list
+    public static Workshop getLowestAttendedWorkshop(char session) {
+        int smallest = 400;
+        Workshop smallestWorkshop = null;
+        for (Workshop w: workshopList) {
+            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
+            //get session type attendance, compare with smallest
+            int numAttendees = d.getNumberOfAttendees(session);
+            //if smallest, update smallest variable and smallestWorkshop
+            if (numAttendees < smallest) {
+                smallest = numAttendees;
+                smallestWorkshop = d;
+            }
+        }
+        return smallestWorkshop;
+    }
+
 
     //method takes in a filepath, imports the file into a List of String arrays,
     // (one for each row), and changes each into a list of Workshops and Attendees
@@ -187,20 +205,125 @@ public class EnrollmentManager {
             }
         }
 
-        System.out.println("Number of LeftOvers: " + leftovers.size());
+        //place students in available workshops
+        //three groups: students only available for workshopA, students only for workshopB, and students
+        //with no placements
+
+        ArrayList<Attendee> availableWorkshopA = new ArrayList<Attendee>();
+        ArrayList<Attendee> availableWorkshopB = new ArrayList<Attendee>();
+        ArrayList<Attendee> availableWorkshopAandB = new ArrayList<Attendee>();
+
         for (Attendee person: leftovers) {
-            System.out.println(person.getName());
-            if (person.getWorkshopA() != null)
-                System.out.println(person.getWorkshopA().getName());
-            else
-                System.out.println("Nothing for workshop A");
-            if (person.getWorkshopB() != null)
-                System.out.println(person.getWorkshopB().getName());
-            else
-                System.out.println("Nothing for workshop B");
-            System.out.println(Arrays.toString(person.getWorkshopPreferences()));
-            System.out.println();
+            if (person.getWorkshopA() == null && person.getWorkshopB() == null) {
+                availableWorkshopAandB.add(person);
+            }
+            else if (person.getWorkshopA() == null) {
+                availableWorkshopA.add(person);
+            }
+            else if (person.getWorkshopB() == null) {
+                availableWorkshopB.add(person);
+            }
         }
+
+        //System.out.println(availableWorkshopA.size());
+        //System.out.println(availableWorkshopB.size());
+        //System.out.println(availableWorkshopAandB.size());
+        System.out.println(leftovers.size());
+
+        //*NOTE: THIS ONLY WORKS FOR DOUBLE SESSION WORKSHOPS BECAUSE OF TIME CONSTRAINTS
+        //ADD IN SINGLE SESSION SUPPORT LATER
+        //for students open for workshopA only, add them to Combs Enterprises if they don't
+        //already have that scheduled
+        //if they do, place them in Journalism as Activism
+        DoubleSessionWorkshop combs = (DoubleSessionWorkshop) getWorkshopByName("From Combs Enterprises to Robin Hood");
+        if (combs == null) {
+            System.out.println("Whoops");
+        }
+        DoubleSessionWorkshop activ = (DoubleSessionWorkshop) getWorkshopByName("Journalism as Activism: The Case of Covid-19 and the Meatpacking Industry");
+        for (Attendee person: availableWorkshopA) {
+            if (person.getWorkshopB().equals(combs)) {
+                activ.addAttendee(person, 'A');
+                person.setWorkshop(activ, 'A');
+
+            }
+            else {
+                combs.addAttendee(person, 'A');
+                person.setWorkshop(combs, 'A');
+            }
+            leftovers.remove(person);
+            scheduledAttendees.add(person);
+            //do I need to remove them from a different list?
+        }
+
+
+
+        //for students open for workshopB only, add them to Combs Enterprises if they don't
+        //already have that scheduled
+        //if they do, place them in Journalism as Activism
+//*NOTE: THIS ONLY WORKS FOR DOUBLE SESSION WORKSHOPS BECAUSE OF TIME CONSTRAINTS
+        //ADD IN SINGLE SESSION SUPPORT LATER
+        //for students open for workshopA only, add them to Combs Enterprises if they don't
+        //already have that scheduled
+        //if they do, place them in Journalism as Activism
+
+
+        for (Attendee person: availableWorkshopB) {
+            if (person.getWorkshopA().equals(combs)) {
+                activ.addAttendee(person, 'B');
+                person.setWorkshop(activ, 'B');
+            }
+            else {
+                combs.addAttendee(person, 'B');
+                person.setWorkshop(combs, 'B');
+            }
+            scheduledAttendees.add(person);
+            leftovers.remove(person);
+            //do I need to remove them from a different list?
+        }
+        System.out.println(leftovers.size());
+
+        //for students open for workshopA AND workshopB, add half of them to Combs and half
+        //to the lowest attended workshop in session B
+        //add the other half to Combs and half to the lowest attended workshop in session A
+        for (int i = 0; i < availableWorkshopAandB.size()/2; i++) {
+            Attendee person = availableWorkshopAandB.get(i);
+            combs.addAttendee(person, 'A');
+            person.setWorkshop(combs, 'A');
+            Workshop w = getLowestAttendedWorkshop('B');
+            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
+            person.setWorkshop(w, 'B');
+            d.addAttendee(person, 'B');
+
+            scheduledAttendees.add(person);
+            leftovers.remove(person);
+        }
+
+        for (int i = availableWorkshopAandB.size()/2 ; i < availableWorkshopAandB.size(); i++) {
+            Attendee person = availableWorkshopAandB.get(i);
+            combs.addAttendee(person, 'B');
+            person.setWorkshop(combs, 'B');
+            Workshop w = getLowestAttendedWorkshop('A');
+            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
+            person.setWorkshop(w, 'A');
+            d.addAttendee(person, 'A');
+            scheduledAttendees.add(person);
+            leftovers.remove(person);
+        }
+
+        System.out.println("Number of LeftOvers: " + leftovers.size());
+//        for (Attendee person: leftovers) {
+//            System.out.println(person.getName());
+//            if (person.getWorkshopA() != null)
+//                System.out.println(person.getWorkshopA().getName());
+//            else
+//                System.out.println("Nothing for workshop A");
+//            if (person.getWorkshopB() != null)
+//                System.out.println(person.getWorkshopB().getName());
+//            else
+//                System.out.println("Nothing for workshop B");
+//            System.out.println(Arrays.toString(person.getWorkshopPreferences()));
+//            System.out.println();
+//        }
 
     }
 
@@ -280,19 +403,27 @@ public class EnrollmentManager {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
 
         for (Attendee attendee : scheduledAttendees) {
+            String workshopAInfo = "None", workshopBInfo = "None";
+            if (attendee.getWorkshopA() != null) {
+                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")";
+            }
+            if (attendee.getWorkshopB() != null) {
+                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")";
+
+            }
             String[] dataRow = {
                     attendee.getEmailAddress(),
                     attendee.getName(),
                     Integer.toString(attendee.getGrade()),
-                    attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")",
-                    attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")",
+                    workshopAInfo,
+                    workshopBInfo
             };
             attendeeFinalData.add(dataRow);
 
         }
 
         //convert list of Attendees to a list of Strings
-        String filePath = "data/result.tsv";
+        String filePath = "data/attendeeresults.tsv";
         FileWriter writer = new FileWriter(filePath);
         CSVParser parser = new CSVParserBuilder().build();
         ICSVWriter csvParserWriter = new CSVWriterBuilder(writer)
@@ -340,11 +471,11 @@ public class EnrollmentManager {
                 for (Attendee a : attendeeList) {
                     if (s.getSession() == 'A') {
                         workshopA += a.getName();
-                        workshopA += ",";
+                        workshopA += ";";
                     }
                     else if (s.getSession() == 'B') {
                         workshopB += a.getName();
-                        workshopB += ", ";
+                        workshopB += ";";
                     }
                     else {
                         System.out.println("Something went wrong...");
@@ -360,11 +491,11 @@ public class EnrollmentManager {
                 attendanceB = attendeeListB.size();
                 for (Attendee a : attendeeListA) {
                     workshopA += a.getName();
-                    workshopA += ", ";
+                    workshopA += ";";
                 }
                 for (Attendee a : attendeeListB) {
                     workshopB += a.getName();
-                    workshopB += ", ";
+                    workshopB += ";";
                 }
 
             }
@@ -412,7 +543,7 @@ public class EnrollmentManager {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
 
         for (Attendee attendee : leftovers) {
-            String workshopAInfo = "", workshopBInfo = "";
+            String workshopAInfo = "None", workshopBInfo = "None";
             if (attendee.getWorkshopA() != null) {
                 workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")";
             }

@@ -7,7 +7,7 @@ public abstract class Workshop {
     private String presenters;
     private String type;
     private int maxAttendance;
-    public static final int MAX_ATTENDEES_SEMINAR = 25;
+    public static final int MAX_ATTENDEES_SEMINAR = 20;
     public static final int MAX_ATTENDEES_TALK = 250;
 
     public Workshop(int id, String name, String description, String url, String moderators, String presenters, String type) {
@@ -18,13 +18,17 @@ public abstract class Workshop {
         this.moderators = moderators;
         this.presenters = presenters;
         this.type = type;
-
-        if (this.type.equals("TALK")) {
+        //manual override
+        if (this.name.equals("On Beyond Disney and Dr. Seuss") || this.name.equals("Bias in Artificial Intelligence")) {
+            maxAttendance = 30;
+        }
+        else if (this.type.equals("TALK")) {
             maxAttendance = MAX_ATTENDEES_TALK;
         }
         else if (this.type.equals("SEMINAR")){
             maxAttendance = MAX_ATTENDEES_SEMINAR;
         }
+
         else {
             System.out.println("Error, person is not getting max Attendance set properly");
         }
