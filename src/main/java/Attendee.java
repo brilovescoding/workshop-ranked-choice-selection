@@ -10,11 +10,17 @@ public class Attendee {
     private Workshop workshopA = null;
     private Workshop workshopB = null;
 
+    private static SingleSessionWorkshop eighthGradeWorkshop = new SingleSessionWorkshop(999, "8th Grade Meeting", "Eighth Grade Meeting for Session B", "location TBD", "Ms. Salzano", "Ms Salzano", 999, 'B', false);
+
     public Attendee(String name, int grade, String emailAddress, String[] workshopPreferences) {
         this.name = name;
         this.grade = grade;
         this.emailAddress = emailAddress;
         this.workshopPreferences = workshopPreferences;
+        if (this.grade == 8) {
+            workshopB = eighthGradeWorkshop;
+            eighthGradeWorkshop.addAttendee(this);
+        }
     }
 
     public String[] getWorkshopPreferences() {
@@ -57,9 +63,6 @@ public class Attendee {
         return emailAddress;
     }
 
-    /* Returns true if available (missing a workshop scheduled for A or B)
-       Eighth graders only attend one session
-     */
     public boolean isAvailable() {
         if (workshopA == null || workshopB == null) {
             return true;
