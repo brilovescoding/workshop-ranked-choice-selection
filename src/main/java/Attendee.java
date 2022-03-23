@@ -4,28 +4,7 @@ public class Attendee {
     private String name;
     private int grade;
     private String emailAddress;
-
-    public String[] getWorkshopPreferences() {
-        return workshopPreferences;
-    }
-
     private String[] workshopPreferences; //in order of preference
-
-    public Workshop getWorkshopA() {
-        return workshopA;
-    }
-
-    public void setWorkshopA(Workshop workshopA) {
-        this.workshopA = workshopA;
-    }
-
-    public Workshop getWorkshopB() {
-        return workshopB;
-    }
-
-    public void setWorkshopB(Workshop workshopB) {
-        this.workshopB = workshopB;
-    }
 
     //references to workshops - do not instantiate in this class, only assign
     private Workshop workshopA = null;
@@ -36,6 +15,20 @@ public class Attendee {
         this.grade = grade;
         this.emailAddress = emailAddress;
         this.workshopPreferences = workshopPreferences;
+    }
+
+    public String[] getWorkshopPreferences() {
+        return workshopPreferences;
+    }
+
+
+
+    public Workshop getWorkshopA() {
+        return workshopA;
+    }
+
+    public Workshop getWorkshopB() {
+        return workshopB;
     }
 
     public String toString() {
@@ -64,6 +57,7 @@ public class Attendee {
         return emailAddress;
     }
 
+    /* ADD: CHANGE ISAVAILABLE TO BE DIFFERENT FOR 8TH GRADERS */
     public boolean isAvailable() {
         if (workshopA == null || workshopB == null) {
             return true;

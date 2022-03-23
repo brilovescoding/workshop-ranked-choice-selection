@@ -87,7 +87,7 @@ public class EnrollmentManager {
         Column D: URL
         Column E, Faculty Moderators (separated by commas)
         Column F, Presenters (separated by commas)
-        Column G, Type (either TALK or SEMINAR)
+        Column G, Max Attendance
         Column H, Sessions (either A, B, or AB)
      */
     public void initializeWorkshopList(List<String[]> workshopData) {
@@ -102,7 +102,7 @@ public class EnrollmentManager {
                     workshopRow[3],
                     workshopRow[4],
                     workshopRow[5],
-                    workshopRow[6].toUpperCase(),
+                    Integer.parseInt(workshopRow[6]),
                     workshopRow[7].toUpperCase()
             ));
         }

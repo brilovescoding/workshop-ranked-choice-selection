@@ -6,8 +6,8 @@ public class SingleSessionWorkshop extends Workshop {
     private char session; //A or B
 
 
-    public SingleSessionWorkshop(int id, String name, String description, String url, String moderators, String presenters, String type, char session) {
-        super(id, name, description, url, moderators, presenters, type);
+    public SingleSessionWorkshop(int id, String name, String description, String url, String moderators, String presenters, int maxAttendance, char session) {
+        super(id, name, description, url, moderators, presenters, maxAttendance);
         this.session = session;
         attendees = new ArrayList<Attendee>();
     }
