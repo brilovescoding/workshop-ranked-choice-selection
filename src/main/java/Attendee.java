@@ -57,7 +57,9 @@ public class Attendee {
         return emailAddress;
     }
 
-    /* ADD: CHANGE ISAVAILABLE TO BE DIFFERENT FOR 8TH GRADERS */
+    /* Returns true if available (missing a workshop scheduled for A or B)
+       Eighth graders only attend one session
+     */
     public boolean isAvailable() {
         if (workshopA == null || workshopB == null) {
             return true;

@@ -105,6 +105,7 @@ public class EnrollmentManager {
         Column F, Presenters (separated by commas)
         Column G, Max Attendance
         Column H, Sessions (either A, B, or AB)
+        Column I, Is Free Talk (can accommodate students who did not pick it)
      */
     public void initializeWorkshopList(List<String[]> workshopData) {
         WorkshopFactory w = new WorkshopFactory();
@@ -119,7 +120,8 @@ public class EnrollmentManager {
                     workshopRow[4],
                     workshopRow[5],
                     Integer.parseInt(workshopRow[6]),
-                    workshopRow[7].toUpperCase()
+                    workshopRow[7].toUpperCase(),
+                    Boolean.parseBoolean(workshopRow[8])
             ));
         }
     }
