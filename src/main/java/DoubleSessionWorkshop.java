@@ -18,6 +18,17 @@ public class DoubleSessionWorkshop extends Workshop {
                 attendeesB.add(a);
             }
         }
+        try {
+            if (this.getMaxAttendance() < this.getNumberOfAttendees('A')) {
+                throw new Exception("Attendance cap overridden for " + this.getName() + "in Workshop A");
+            }
+            else if (this.getMaxAttendance() < this.getNumberOfAttendees('B')) {
+                throw new Exception("Attendance cap overridden for " + this.getName() + "in Workshop B");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public ArrayList<Attendee> getAttendees(char session) {

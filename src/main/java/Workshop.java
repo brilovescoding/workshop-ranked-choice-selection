@@ -41,4 +41,8 @@ public abstract class Workshop {
     public String getPresenters() {
         return presenters;
     }
+
+    public boolean isFreeTalk() {
+        return isFreeTalk;
+    }
 }

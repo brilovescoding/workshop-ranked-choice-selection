@@ -1,9 +1,6 @@
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import com.opencsv.*;
 
@@ -28,6 +25,14 @@ public class EnrollmentManager {
         attendeeList = new ArrayList<Attendee>();
         scheduledAttendees = new ArrayList<Attendee>();
         leftovers = new ArrayList<Attendee>();
+    }
+
+    public static ArrayList<Workshop> getFreeTalkSessions() {
+        ArrayList<Workshop> freeTalks = new ArrayList<Workshop>();
+        for (Workshop w: workshopList) {
+            if (w.isFreeTalk()) { freeTalks.add(w); }
+        }
+        return freeTalks;
     }
 
     //gets lowest attended workshop from the list
@@ -62,6 +67,11 @@ public class EnrollmentManager {
         }
         return smallestWorkshop;
 
+    }
+
+    //Only sorts DoubleSession workshops by comparing number of attendees
+    public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, char session) {
+        listToBeSorted.sort(Comparator.comparingInt(o -> ((DoubleSessionWorkshop) o).getNumberOfAttendees(session)));
     }
 
     //method takes in a filepath, imports the file into a List of String arrays,
@@ -210,10 +220,6 @@ public class EnrollmentManager {
 
         //gets individuals who got scheduled for no workshops,
         // i.e. aren't present in the scheduledAttendees list
-        //this creates an issue as people with only one workshop aren't included
-        //ArrayList<Attendee> leftovers = (ArrayList<Attendee>) Helpers.difference(attendeeList, scheduledAttendees);
-
-
         //get entire list of attendees, check each of them to see if they have an opening
         //use the method isAvailable to check for this
 
@@ -248,101 +254,59 @@ public class EnrollmentManager {
         //System.out.println(availableWorkshopAandB.size());
         System.out.println(leftovers.size());
 
-        //*NOTE: THIS ONLY WORKS FOR DOUBLE SESSION WORKSHOPS BECAUSE OF TIME CONSTRAINTS
+        //NOTE: THIS ONLY WORKS FOR DOUBLE SESSION WORKSHOPS BECAUSE OF TIME CONSTRAINTS
         //ADD IN SINGLE SESSION SUPPORT LATER
-        //for students open for workshopA only, add them to Combs Enterprises if they don't
-        //already have that scheduled
-        //if they do, place them in Journalism as Activism
-        DoubleSessionWorkshop combs = (DoubleSessionWorkshop) getWorkshopByName("From Combs Enterprises to Robin Hood");
-        if (combs == null) {
-            System.out.println("Whoops");
-        }
-        DoubleSessionWorkshop activ = (DoubleSessionWorkshop) getWorkshopByName("Journalism as Activism: The Case of Covid-19 and the Meatpacking Industry");
+        //first, sort the list of freeTalks
+        //for students open for workshopA only, add them to the lowest attended free workshop session for session A
+        //if they are already in that workshop, then put them in the second-most attended workshop
+        ArrayList<Workshop> freeTalks = getFreeTalkSessions();
         for (Attendee person: availableWorkshopA) {
-            if (person.getWorkshopB().equals(combs)) {
-                activ.addAttendee(person, 'A');
-                person.setWorkshop(activ, 'A');
-
+            sortWorkshopListByAttendance(freeTalks, 'A');
+            DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
+            DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
+            if (person.getWorkshopB().equals(lowest)) {
+                secondLowest.addAttendee(person, 'A');
+                person.setWorkshop(secondLowest, 'A');
             }
             else {
-                combs.addAttendee(person, 'A');
-                person.setWorkshop(combs, 'A');
+                lowest.addAttendee(person, 'A');
+                person.setWorkshop(lowest, 'A');
             }
+
             leftovers.remove(person);
             scheduledAttendees.add(person);
-            //do I need to remove them from a different list?
         }
-
-
-
-        //for students open for workshopB only, add them to Combs Enterprises if they don't
-        //already have that scheduled
-        //if they do, place them in Journalism as Activism
-//*NOTE: THIS ONLY WORKS FOR DOUBLE SESSION WORKSHOPS BECAUSE OF TIME CONSTRAINTS
-        //ADD IN SINGLE SESSION SUPPORT LATER
-        //for students open for workshopA only, add them to Combs Enterprises if they don't
-        //already have that scheduled
-        //if they do, place them in Journalism as Activism
-
 
         for (Attendee person: availableWorkshopB) {
-            if (person.getWorkshopA().equals(combs)) {
-                activ.addAttendee(person, 'B');
-                person.setWorkshop(activ, 'B');
+            sortWorkshopListByAttendance(freeTalks, 'B');
+            DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
+            DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
+            if (person.getWorkshopA().equals(lowest)) {
+                secondLowest.addAttendee(person, 'B');
+                person.setWorkshop(secondLowest, 'B');
             }
             else {
-                combs.addAttendee(person, 'B');
-                person.setWorkshop(combs, 'B');
+                lowest.addAttendee(person, 'B');
+                person.setWorkshop(lowest, 'B');
             }
-            scheduledAttendees.add(person);
-            leftovers.remove(person);
-            //do I need to remove them from a different list?
-        }
-        System.out.println(leftovers.size());
 
-        //for students open for workshopA AND workshopB, add half of them to Combs and half
-        //to the lowest attended workshop in session B
-        //add the other half to Combs and half to the lowest attended workshop in session A
-        for (int i = 0; i < availableWorkshopAandB.size()/2; i++) {
-            Attendee person = availableWorkshopAandB.get(i);
-            combs.addAttendee(person, 'A');
-            person.setWorkshop(combs, 'A');
-            Workshop w = getLowestAttendedWorkshop('B');
-            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
-            person.setWorkshop(w, 'B');
-            d.addAttendee(person, 'B');
-
-            scheduledAttendees.add(person);
             leftovers.remove(person);
+            scheduledAttendees.add(person);
         }
 
-        for (int i = availableWorkshopAandB.size()/2 ; i < availableWorkshopAandB.size(); i++) {
-            Attendee person = availableWorkshopAandB.get(i);
-            combs.addAttendee(person, 'B');
-            person.setWorkshop(combs, 'B');
-            Workshop w = getLowestAttendedWorkshop('A');
-            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
-            person.setWorkshop(w, 'A');
-            d.addAttendee(person, 'A');
-            scheduledAttendees.add(person);
+        for (Attendee person: availableWorkshopAandB) {
+            sortWorkshopListByAttendance(freeTalks, 'B');
+            DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
+            DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
+            lowest.addAttendee(person, 'A');
+            person.setWorkshop(lowest, 'A');
+            secondLowest.addAttendee(person, 'B');
+            person.setWorkshop(secondLowest, 'B');
             leftovers.remove(person);
+            scheduledAttendees.add(person);
         }
 
         System.out.println("Number of LeftOvers: " + leftovers.size());
-//        for (Attendee person: leftovers) {
-//            System.out.println(person.getName());
-//            if (person.getWorkshopA() != null)
-//                System.out.println(person.getWorkshopA().getName());
-//            else
-//                System.out.println("Nothing for workshop A");
-//            if (person.getWorkshopB() != null)
-//                System.out.println(person.getWorkshopB().getName());
-//            else
-//                System.out.println("Nothing for workshop B");
-//            System.out.println(Arrays.toString(person.getWorkshopPreferences()));
-//            System.out.println();
-//        }
-
     }
 
     //parameter: a Workshop and a pref num that is from 1 - 5
