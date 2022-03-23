@@ -26,7 +26,27 @@ public class EnrollmentManager {
         scheduledAttendees = new ArrayList<Attendee>();
         leftovers = new ArrayList<Attendee>();
     }
+    public double calculateStandardDeviationOfAttendance(char session) {
 
+        // finding the sum of array values
+        double sum = 0.0;
+
+        for (int i = 0; i < workshopList.size(); i++) {
+            sum += ((DoubleSessionWorkshop)workshopList.get(i)).getNumberOfAttendees(session);
+        }
+
+        // getting the mean of array.
+        double mean = sum / workshopList.size();
+
+        // calculating the standard deviation
+        double standardDeviation = 0.0;
+        for (int i = 0; i < workshopList.size(); i++) {
+            standardDeviation += Math.pow(((DoubleSessionWorkshop)workshopList.get(i)).getNumberOfAttendees(session) - mean, 2);
+
+        }
+
+        return Math.sqrt(standardDeviation/workshopList.size());
+    }
     public static ArrayList<Workshop> getFreeTalkSessions() {
         ArrayList<Workshop> freeTalks = new ArrayList<Workshop>();
         for (Workshop w: workshopList) {
@@ -37,7 +57,7 @@ public class EnrollmentManager {
 
     //Only sorts DoubleSession workshops by comparing number of attendees
     public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, char session) {
-        listToBeSorted.sort(Comparator.comparingInt(o -> ((DoubleSessionWorkshop) o).getNumberOfAttendees(session)));
+        listToBeSorted.sort((o1, o2) -> ((DoubleSessionWorkshop) o1).getNumberOfAttendees(session) - ((DoubleSessionWorkshop) o2).getNumberOfAttendees(session));
     }
 
     //method takes in a filepath, imports the file into a List of String arrays,
