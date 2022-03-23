@@ -353,10 +353,10 @@ public class EnrollmentManager {
         for (Attendee attendee : scheduledAttendees) {
             String workshopAInfo = "None", workshopBInfo = "None";
             if (attendee.getWorkshopA() != null) {
-                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")";
+                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getLocation() + ")";
             }
             if (attendee.getWorkshopB() != null) {
-                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")";
+                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getLocation() + ")";
 
             }
             String[] dataRow = {
@@ -450,7 +450,7 @@ public class EnrollmentManager {
             String[] dataRow = {
                     workshop.getModerators(),
                     workshop.getName(),
-                    workshop.getUrl(),
+                    workshop.getLocation(),
                     workshop.getPresenters(),
                     workshopA,
                     String.valueOf(attendanceA),
@@ -493,10 +493,10 @@ public class EnrollmentManager {
         for (Attendee attendee : leftovers) {
             String workshopAInfo = "None", workshopBInfo = "None";
             if (attendee.getWorkshopA() != null) {
-                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getUrl() + ")";
+                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getLocation() + ")";
             }
             if (attendee.getWorkshopB() != null) {
-                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getUrl() + ")";
+                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getLocation() + ")";
 
             }
             String[] dataRow = {
