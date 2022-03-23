@@ -35,40 +35,6 @@ public class EnrollmentManager {
         return freeTalks;
     }
 
-    //gets lowest attended workshop from the list
-    public static Workshop getLowestAttendedWorkshop(char session) {
-        int smallest = 400;
-        Workshop smallestWorkshop = null;
-        for (Workshop w: workshopList) {
-            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
-            //get session type attendance, compare with smallest
-            int numAttendees = d.getNumberOfAttendees(session);
-            //if smallest, update smallest variable and smallestWorkshop
-            if (numAttendees < smallest) {
-                smallest = numAttendees;
-                smallestWorkshop = d;
-            }
-        }
-        return smallestWorkshop;
-    }
-
-    public static Workshop getLowestAttendedWorkshop(ArrayList<Workshop> workshops, char session) {
-        int smallest = 400;
-        Workshop smallestWorkshop = null;
-        for (Workshop w: workshops) {
-            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
-            //get session type attendance, compare with smallest
-            int numAttendees = d.getNumberOfAttendees(session);
-            //if smallest, update smallest variable and smallestWorkshop
-            if (numAttendees < smallest) {
-                smallest = numAttendees;
-                smallestWorkshop = d;
-            }
-        }
-        return smallestWorkshop;
-
-    }
-
     //Only sorts DoubleSession workshops by comparing number of attendees
     public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, char session) {
         listToBeSorted.sort(Comparator.comparingInt(o -> ((DoubleSessionWorkshop) o).getNumberOfAttendees(session)));
