@@ -73,15 +73,14 @@ public class EnrollmentManager {
 
     /*
     workshop spreadsheet format should be:
-        Column A: ID
-        Column B: Name
-        Column C: Description
-        Column D: URL
-        Column E, Faculty Moderators (separated by commas)
-        Column F, Presenters (separated by commas)
-        Column G, Max Attendance
-        Column H, Sessions (either A, B, or AB)
-        Column I, Is Free Talk (can accommodate students who did not pick it)
+        Column A: Name
+        Column B: Description
+        Column C: URL
+        Column D, Faculty Moderators (separated by commas)
+        Column E, Presenters (separated by commas)
+        Column F, Max Attendance
+        Column G, Sessions (either A, B, or AB)
+        Column H, Is Free Talk (can accommodate students who did not pick it)
      */
     public void initializeWorkshopList(List<String[]> workshopData) {
         WorkshopFactory w = new WorkshopFactory();
@@ -89,23 +88,22 @@ public class EnrollmentManager {
         //change comma-separated strings for moderators/presenters into array of Strings
         for (String[] workshopRow: workshopData) {
             workshopList.add(w.makeWorkshop(
-                    Integer.parseInt(workshopRow[0]),
+                    workshopRow[0],
                     workshopRow[1],
                     workshopRow[2],
                     workshopRow[3],
                     workshopRow[4],
-                    workshopRow[5],
-                    Integer.parseInt(workshopRow[6]),
-                    workshopRow[7].toUpperCase(),
-                    Boolean.parseBoolean(workshopRow[8])
+                    Integer.parseInt(workshopRow[5]),
+                    workshopRow[6].toUpperCase(),
+                    Boolean.parseBoolean(workshopRow[7])
             ));
         }
     }
 
     /* Data should be organized as follows:
-    Column A: Name
-    Column B: Grade
-    Column C: Email Address
+    Column A: Email Address
+    Column B: Name
+    Column C: Grade
     Columns D-H: 1st-5th preferences
 
      */
@@ -113,8 +111,8 @@ public class EnrollmentManager {
         for (String[] attendeeRow: attendeeData) {
             attendeeList.add(new Attendee(
                     attendeeRow[0],
-                    Integer.parseInt(attendeeRow[1]),
-                    attendeeRow[2],
+                    attendeeRow[1],
+                    Integer.parseInt(attendeeRow[2]),
                     new String[] {attendeeRow[3], attendeeRow[4], attendeeRow[5], attendeeRow[6], attendeeRow[7]}
             ));
         }

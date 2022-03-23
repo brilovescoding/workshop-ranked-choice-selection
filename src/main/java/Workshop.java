@@ -1,5 +1,4 @@
 public abstract class Workshop {
-    private int id;
     private String name;
     private String description;
     private String location;
@@ -8,8 +7,7 @@ public abstract class Workshop {
     private int maxAttendance;
     private boolean isFreeTalk;
 
-    public Workshop(int id, String name, String description, String location, String moderators, String presenters, int maxAttendance, boolean isFreeTalk) {
-        this.id = id;
+    public Workshop(String name, String description, String location, String moderators, String presenters, int maxAttendance, boolean isFreeTalk) {
         this.name = name;
         this.description = description;
         this.location = location;

@@ -10,9 +10,9 @@ public class Attendee {
     private Workshop workshopA = null;
     private Workshop workshopB = null;
 
-    private static SingleSessionWorkshop eighthGradeWorkshop = new SingleSessionWorkshop(999, "8th Grade Meeting", "Eighth Grade Meeting for Session B", "location TBD", "Ms. Salzano", "Ms Salzano", 999, 'B', false);
+    private static SingleSessionWorkshop eighthGradeWorkshop = new SingleSessionWorkshop("8th Grade Meeting", "Eighth Grade Meeting for Session B", "location TBD", "Ms. Salzano", "Ms Salzano", 999, 'B', false);
 
-    public Attendee(String name, int grade, String emailAddress, String[] workshopPreferences) {
+    public Attendee(String emailAddress, String name, int grade, String[] workshopPreferences) {
         this.name = name;
         this.grade = grade;
         this.emailAddress = emailAddress;
