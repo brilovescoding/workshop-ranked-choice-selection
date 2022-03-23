@@ -47,6 +47,22 @@ public class EnrollmentManager {
         return smallestWorkshop;
     }
 
+    public static Workshop getLowestAttendedWorkshop(ArrayList<Workshop> workshops, char session) {
+        int smallest = 400;
+        Workshop smallestWorkshop = null;
+        for (Workshop w: workshops) {
+            DoubleSessionWorkshop d = (DoubleSessionWorkshop) w;
+            //get session type attendance, compare with smallest
+            int numAttendees = d.getNumberOfAttendees(session);
+            //if smallest, update smallest variable and smallestWorkshop
+            if (numAttendees < smallest) {
+                smallest = numAttendees;
+                smallestWorkshop = d;
+            }
+        }
+        return smallestWorkshop;
+
+    }
 
     //method takes in a filepath, imports the file into a List of String arrays,
     // (one for each row), and changes each into a list of Workshops and Attendees
