@@ -248,6 +248,8 @@ public class EnrollmentManager {
             sortWorkshopListByAttendance(freeTalks, 'A');
             DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
             DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
+            System.out.println("Lowest is " + freeTalks.get(0).getName() + " at " + ((DoubleSessionWorkshop) freeTalks.get(0)).getNumberOfAttendees('A'));
+            System.out.println("Second lowest is " + freeTalks.get(1).getName() + " at " + ((DoubleSessionWorkshop) freeTalks.get(1)).getNumberOfAttendees('A'));
             if (person.getWorkshopB().equals(lowest)) {
                 secondLowest.addAttendee(person, 'A');
                 person.setWorkshop(secondLowest, 'A');
@@ -279,13 +281,26 @@ public class EnrollmentManager {
         }
 
         for (Attendee person: availableWorkshopAandB) {
-            sortWorkshopListByAttendance(freeTalks, 'B');
+            sortWorkshopListByAttendance(freeTalks, 'A');
             DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
             DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
+
             lowest.addAttendee(person, 'A');
             person.setWorkshop(lowest, 'A');
-            secondLowest.addAttendee(person, 'B');
-            person.setWorkshop(secondLowest, 'B');
+
+
+            sortWorkshopListByAttendance(freeTalks, 'B');
+            lowest = (DoubleSessionWorkshop) freeTalks.get(0);
+            secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
+            if (person.getWorkshopA().equals(lowest)) {
+                secondLowest.addAttendee(person, 'B');
+                person.setWorkshop(secondLowest, 'B');
+            }
+            else {
+                lowest.addAttendee(person, 'B');
+                person.setWorkshop(lowest, 'B');
+            }
+
             leftovers.remove(person);
             scheduledAttendees.add(person);
         }
