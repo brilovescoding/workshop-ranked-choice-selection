@@ -363,26 +363,39 @@ public class EnrollmentManager {
     //Column A: Email Address
     //Column B: Attendee Name
     //Column C: Attendee Grade
-    //Column D: Attendee's Workshop A name and URL
-    //Column E: Attendee's Workshop B name and URL
+    //Column D: Attendee's Workshop A name
+    //Column E: Attendee's Workshop A location
+    //Column F: Attendee's Workshop A description
+    //Column G: Attendee's Workshop B name
+    //Column H: Attendee's Workshop B location
+    //Column I: Attendee's Workshop B description
     public void convertAttendeeDataToCSV() throws Exception {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
 
         for (Attendee attendee : scheduledAttendees) {
-            String workshopAInfo = "None", workshopBInfo = "None";
+            String workshopAName = "None", workshopBName = "None";
+            String workshopALocation = "None", workshopBLocation = "None";
+            String workshopADescription = "None", workshopBDescription = "None";
             if (attendee.getWorkshopA() != null) {
-                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getLocation() + ")";
+                workshopAName = attendee.getWorkshopA().getName();
+                workshopALocation = attendee.getWorkshopA().getLocation();
+                workshopADescription = attendee.getWorkshopA().getDescription();
             }
             if (attendee.getWorkshopB() != null) {
-                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getLocation() + ")";
-
+                workshopBName = attendee.getWorkshopB().getName();
+                workshopBLocation = attendee.getWorkshopB().getLocation();
+                workshopBDescription = attendee.getWorkshopB().getDescription();
             }
             String[] dataRow = {
                     attendee.getEmailAddress(),
                     attendee.getName(),
                     Integer.toString(attendee.getGrade()),
-                    workshopAInfo,
-                    workshopBInfo
+                    workshopAName,
+                    workshopALocation,
+                    workshopADescription,
+                    workshopBName,
+                    workshopBLocation,
+                    workshopBDescription
             };
             attendeeFinalData.add(dataRow);
 

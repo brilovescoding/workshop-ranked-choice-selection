@@ -43,4 +43,8 @@ public abstract class Workshop {
     public boolean isFreeTalk() {
         return isFreeTalk;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

@@ -12,23 +12,23 @@ public class DoubleSessionWorkshop extends Workshop {
 
     public void addAttendee(Attendee a, char session) {
         if (a != null) {
-            if (session == 'A') {
+            if (session == 'A' && this.getMaxAttendance() > this.getNumberOfAttendees('A')) {
                 attendeesA.add(a);
-            } else if (session == 'B') {
+            } else if (session == 'B' && this.getMaxAttendance() > this.getNumberOfAttendees('B')) {
                 attendeesB.add(a);
             }
         }
-        try {
-            if (this.getMaxAttendance() < this.getNumberOfAttendees('A')) {
-                throw new Exception("Attendance cap overridden for " + this.getName() + "in Workshop A");
-            }
-            else if (this.getMaxAttendance() < this.getNumberOfAttendees('B')) {
-                throw new Exception("Attendance cap overridden for " + this.getName() + "in Workshop B");
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
+//        try {
+//            if (this.getMaxAttendance() < this.getNumberOfAttendees('A')) {
+//                throw new Exception("Attendance cap overridden for " + this.getName() + "in Workshop A");
+//            }
+//            else if (this.getMaxAttendance() < this.getNumberOfAttendees('B')) {
+//                throw new Exception("Attendance cap overridden for " + this.getName() + "in Workshop B");
+//            }
+//        }
+//        catch (Exception e) {
+//            System.out.println(e);
+//        }
     }
 
     public ArrayList<Attendee> getAttendees(char session) {
