@@ -7,20 +7,15 @@ public class Attendee {
     private String[] workshopPreferences; //in order of preference
 
     //references to workshops - do not instantiate in this class, only assign
-    private Workshop workshopA = null;
-    private Workshop workshopB = null;
-
-    private static SingleSessionWorkshop eighthGradeWorkshop = new SingleSessionWorkshop("8th Grade Meeting", "Eighth Grade Meeting for Session B", "location TBD", "Ms. Salzano", "Ms Salzano", 999, 'B', false);
+    private Workshop[] workshops;
 
     public Attendee(String emailAddress, String name, int grade, String[] workshopPreferences) {
         this.name = name;
         this.grade = grade;
         this.emailAddress = emailAddress;
         this.workshopPreferences = workshopPreferences;
-        if (this.grade == 8) {
-            workshopB = eighthGradeWorkshop;
-            eighthGradeWorkshop.addAttendee(this);
-        }
+        this.workshops = new Workshop[EnrollmentManager.NUMBER_OF_WORKSHOP_SESSIONS];
+        //students get something in each Workshop slot
     }
 
     public String[] getWorkshopPreferences() {
@@ -28,13 +23,10 @@ public class Attendee {
     }
 
 
+    //gets Workshop assigned to student at that session
+    public Workshop getWorkshop(char session) {
 
-    public Workshop getWorkshopA() {
-        return workshopA;
-    }
 
-    public Workshop getWorkshopB() {
-        return workshopB;
     }
 
     public String toString() {

@@ -1,4 +1,6 @@
-public abstract class Workshop {
+import java.util.ArrayList;
+
+public class Workshop {
     private String name;
     private String description;
     private String location;
@@ -6,6 +8,8 @@ public abstract class Workshop {
     private String presenters;
     private int maxAttendance;
     private boolean isFreeTalk;
+
+    private ArrayList<AttendeeList> attendees; //ArrayList of Attendees
 
     public Workshop(String name, String description, String location, String moderators, String presenters, int maxAttendance, boolean isFreeTalk) {
         this.name = name;
