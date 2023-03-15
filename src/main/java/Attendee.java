@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Attendee {
     private String name;
@@ -7,14 +8,13 @@ public class Attendee {
     private String[] workshopPreferences; //in order of preference
 
     //references to workshops - do not instantiate in this class, only assign
-    private Workshop[] workshops;
-
+    private HashMap<WorkshopSessions, Workshop> workshops;
     public Attendee(String emailAddress, String name, int grade, String[] workshopPreferences) {
         this.name = name;
         this.grade = grade;
         this.emailAddress = emailAddress;
         this.workshopPreferences = workshopPreferences;
-        this.workshops = new Workshop[EnrollmentManager.NUMBER_OF_WORKSHOP_SESSIONS];
+        this.workshops = new HashMap<WorkshopSessions, Workshop>(WorkshopSessions.values().length);
         //students get something in each Workshop slot
     }
 
@@ -33,16 +33,6 @@ public class Attendee {
         return this.name;
     }
 
-    public void setWorkshop(Workshop w, char session) {
-        if (session == 'A') {
-            workshopA = w;
-        }
-        else if (session == 'B') {
-            workshopB = w;
-        }
-
-    }
-
     public String getName() {
         return name;
     }
@@ -56,9 +46,17 @@ public class Attendee {
     }
 
     public boolean isAvailable() {
-        if (workshopA == null || workshopB == null) {
+        if (getListOfAvailableSessions().size() > 0) {
             return true;
         }
         return false;
+    }
+
+    public ArrayList<WorkshopSessions> getListOfAvailableSessions() {
+        ArrayList<WorkshopSessions> temp = new ArrayList<WorkshopSessions>();
+        hm.forEach((k, v)
+                -> if () //if the workshop is available then add to temp
+        )
+        return temp;
     }
 }

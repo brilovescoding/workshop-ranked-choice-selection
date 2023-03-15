@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class Workshop {
     private String name;
@@ -9,7 +11,7 @@ public class Workshop {
     private int maxAttendance;
     private boolean isFreeTalk;
 
-    private ArrayList<AttendeeList> attendees; //ArrayList of Attendees
+    private HashMap<WorkshopSessions, ArrayList<Attendee>> attendees; //Hashmap
 
     public Workshop(String name, String description, String location, String moderators, String presenters, int maxAttendance, boolean isFreeTalk) {
         this.name = name;
