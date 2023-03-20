@@ -13,7 +13,7 @@ public class Workshop {
 
     private HashMap<WorkshopSessions, ArrayList<Attendee>> attendees; //Hashmap
 
-    public Workshop(String name, String description, String location, String moderators, String presenters, int maxAttendance, boolean isFreeTalk) {
+    public Workshop(String name, String description, String location, String moderators, String presenters, int maxAttendance, boolean isFreeTalk, HashMap<WorkshopSessions, ArrayList<Attendee>> attendees) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -21,7 +21,7 @@ public class Workshop {
         this.presenters = presenters;
         this.maxAttendance = maxAttendance;
         this.isFreeTalk = isFreeTalk;
-        this.attendees = new HashMap<WorkshopSessions, ArrayList<Attendee>>();
+        this.attendees = attendees;
     }
     public String toString() {
         return "Name: " + name + "\nDescription: " + description + "\nLocation: " + location + "\nPresenters: " + presenters + "\nModerators: " + moderators + "\n";
