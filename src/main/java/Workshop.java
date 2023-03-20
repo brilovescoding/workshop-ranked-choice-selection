@@ -58,4 +58,8 @@ public class Workshop {
     public HashMap<WorkshopSessions, ArrayList<Attendee>> getAttendees() {
         return attendees;
     }
+
+    public int getNumberOfOpenSpots(WorkshopSessions session) {
+        return getMaxAttendance() - this.attendees.get(session).size();
+    }
 }
