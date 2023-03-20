@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Attendee {
-    private String name;
-    private int grade;
-    private String emailAddress;
+    private final String name;
+    private final int grade;
+    private final String emailAddress;
     private String[] workshopPreferences; //in order of preference
 
     //references to workshops - do not instantiate in this class, only assign
@@ -24,9 +24,9 @@ public class Attendee {
 
 
     //gets Workshop assigned to student at that session
-    public Workshop getWorkshop(char session) {
+    public Workshop getWorkshop(WorkshopSessions sessionChar) {
 
-
+        return null;
     }
 
     public String toString() {
@@ -52,11 +52,5 @@ public class Attendee {
         return false;
     }
 
-    public ArrayList<WorkshopSessions> getListOfAvailableSessions() {
-        ArrayList<WorkshopSessions> temp = new ArrayList<WorkshopSessions>();
-        hm.forEach((k, v)
-                -> if () //if the workshop is available then add to temp
-        )
-        return temp;
-    }
+
 }

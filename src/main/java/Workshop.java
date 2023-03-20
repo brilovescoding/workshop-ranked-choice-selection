@@ -3,13 +3,13 @@ import java.util.HashMap;
 
 
 public class Workshop {
-    private String name;
-    private String description;
-    private String location;
-    private String moderators;
-    private String presenters;
-    private int maxAttendance;
-    private boolean isFreeTalk;
+    private final String name;
+    private final String description;
+    private final String location;
+    private final String moderators;
+    private final String presenters;
+    private final int maxAttendance;
+    private final boolean isFreeTalk;
 
     private HashMap<WorkshopSessions, ArrayList<Attendee>> attendees; //Hashmap
 
@@ -53,4 +53,6 @@ public class Workshop {
     public String getDescription() {
         return description;
     }
+
+
 }
