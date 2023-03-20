@@ -15,7 +15,8 @@ public class Attendee {
         this.emailAddress = emailAddress;
         this.workshopPreferences = workshopPreferences;
         this.workshops = new HashMap<WorkshopSessions, Workshop>(WorkshopSessions.values().length);
-        //students get something in each Workshop slot
+
+        //students get something in each Workshop slot. The length of the WorkshopSessions enum determines the maximum size of the Hashmap
     }
 
     public String[] getWorkshopPreferences() {
@@ -25,8 +26,7 @@ public class Attendee {
 
     //gets Workshop assigned to student at that session
     public Workshop getWorkshop(WorkshopSessions sessionChar) {
-
-        return null;
+        return workshops.get(sessionChar);
     }
 
     public String toString() {
@@ -46,10 +46,26 @@ public class Attendee {
     }
 
     public boolean isAvailable() {
-        if (getListOfAvailableSessions().size() > 0) {
-            return true;
+        return getListOfAvailableSessions().size() > 0 ? true:false;
+    }
+
+    //returns available sessions for a given attendee
+    public HashMap<WorkshopSessions, Workshop> getListOfAvailableSessions() {
+        HashMap<WorkshopSessions, Workshop> temp = new HashMap<WorkshopSessions, Workshop>();
+        //for each workshop session type (loop through enum):
+        for (WorkshopSessions sessionChar: WorkshopSessions.values()) {
+            Workshop w = workshops.get(sessionChar);
+            if (w != null && w.getAttendees().size() < w.getMaxAttendance()) {
+                temp.put(sessionChar, w);
+            }
         }
-        return false;
+        //if it's not null AND the attendance is not max, add it to the ArrayList, then return
+        if (temp.isEmpty()) {
+            return null;
+        }
+
+        return temp;
+
     }
 
 

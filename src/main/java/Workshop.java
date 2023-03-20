@@ -21,6 +21,7 @@ public class Workshop {
         this.presenters = presenters;
         this.maxAttendance = maxAttendance;
         this.isFreeTalk = isFreeTalk;
+        this.attendees = new HashMap<WorkshopSessions, ArrayList<Attendee>>();
     }
     public String toString() {
         return "Name: " + name + "\nDescription: " + description + "\nLocation: " + location + "\nPresenters: " + presenters + "\nModerators: " + moderators + "\n";
@@ -54,5 +55,7 @@ public class Workshop {
         return description;
     }
 
-
+    public HashMap<WorkshopSessions, ArrayList<Attendee>> getAttendees() {
+        return attendees;
+    }
 }
