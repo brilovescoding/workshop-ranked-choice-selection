@@ -7,7 +7,6 @@ public class Attendee {
     private final String emailAddress;
     private String[] workshopPreferences; //in order of preference
 
-    //references to workshops - do not instantiate in this class, only assign
     private HashMap<WorkshopSessions, Workshop> workshops;
     public Attendee(String emailAddress, String name, int grade, String[] workshopPreferences) {
         this.name = name;
@@ -27,6 +26,10 @@ public class Attendee {
     //gets Workshop assigned to student at that session
     public Workshop getWorkshop(WorkshopSessions sessionChar) {
         return workshops.get(sessionChar);
+    }
+
+    public void setWorkshop(Workshop w, WorkshopSessions ws) {
+        workshops.put(ws, w);
     }
 
     public String toString() {

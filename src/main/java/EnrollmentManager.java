@@ -6,13 +6,13 @@ import com.opencsv.*;
 
 //class will contain methods for importing attendance and workshop data
 public class EnrollmentManager {
-    public static ArrayList<WorkshopSessions> getListOfAvailableSessions() {
-        ArrayList<WorkshopSessions> temp = new ArrayList<WorkshopSessions>();
-        workshopList.forEach((k, v)
-                -> if () //if the workshop is available then add to temp
-        )
-        return temp;
-    }
+//    public static ArrayList<WorkshopSessions> getListOfAvailableSessions() {
+//        ArrayList<WorkshopSessions> temp = new ArrayList<WorkshopSessions>();
+//        workshopList.forEach((k, v)
+//                -> if () //if the workshop is available then add to temp
+//        )
+//        return temp;
+//    }
     public final static int NUMBER_OF_WORKSHOP_SESSIONS = 3;
     private static ArrayList<Workshop> workshopList;
     private ArrayList<Attendee> attendeeList;
@@ -63,9 +63,9 @@ public class EnrollmentManager {
     }
 
     //Only sorts DoubleSession workshops by comparing number of attendees
-    public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, char session) {
-        listToBeSorted.sort((o1, o2) -> ((DoubleSessionWorkshop) o1).getNumberOfAttendees(session) - ((DoubleSessionWorkshop) o2).getNumberOfAttendees(session));
-    }
+//    public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, char session) {
+//        listToBeSorted.sort((o1, o2) -> ((DoubleSessionWorkshop) o1).getNumberOfAttendees(session) - ((DoubleSessionWorkshop) o2).getNumberOfAttendees(session));
+//    }
 
     //method takes in a filepath, imports the file into a List of String arrays,
     // (one for each row), and changes each into a list of Workshops and Attendees
@@ -102,7 +102,7 @@ public class EnrollmentManager {
     workshop spreadsheet format should be:
         Column A: Name
         Column B: Description
-        Column C: URL
+        Column C: Location
         Column D, Faculty Moderators (separated by commas)
         Column E, Presenters (separated by commas)
         Column F, Max Attendance
@@ -157,6 +157,9 @@ public class EnrollmentManager {
         for (int preferenceLevel = 1; preferenceLevel <= 5; preferenceLevel++) {
             //for each workshop, place each preference level in turn
             for (Workshop workshop : workshopList) {
+                WorkshopSessions[] availableSessions = workshop.get
+                //for each available workshop session
+
                 //get the attendees who listed this workshop as the one they wanted
                 //match the name they put for the first item in attendance.workshopPreferences to the
                 //name of the given workshop
