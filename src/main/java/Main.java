@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         final int NUMBER_OF_SIMULATIONS = 50;
-        ArrayList<EnrollmentManager> enrollments = new ArrayList<EnrollmentManager>();
+        ArrayList<EnrollmentManager> enrollments = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_SIMULATIONS; i++) {
             EnrollmentManager e = new EnrollmentManager();
             e.importData("data/workshops.tsv", "data/attendees.tsv"); //file names here
