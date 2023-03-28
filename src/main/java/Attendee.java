@@ -52,13 +52,29 @@ public class Attendee {
         return getListOfAvailableSessions().size() > 0 ? true:false;
     }
 
+    //returns true if student does not have a value associated with that key
+    public boolean isAvailable(WorkshopSessions sessionChar) {
+        return getListOfAvailableSessions().get(sessionChar) == null ? true: false;
+    }
+
+    public boolean isStudentAlreadyInWorkshop(Workshop w) {
+        //loop through workshops
+        //if the workshop's reference matches another's, return true
+        for (Workshop workshop: workshops.values()) {
+            if (workshop == w) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //returns available sessions for a given attendee
     public HashMap<WorkshopSessions, Workshop> getListOfAvailableSessions() {
         HashMap<WorkshopSessions, Workshop> temp = new HashMap<WorkshopSessions, Workshop>();
         //for each workshop session type (loop through enum):
         for (WorkshopSessions sessionChar: WorkshopSessions.values()) {
             Workshop w = workshops.get(sessionChar);
-            if (w != null && w.getAttendees().size() < w.getMaxAttendance()) {
+            if (w != null && w.getAttendees(sessionChar).size() < w.getMaxAttendance()) {
                 temp.put(sessionChar, w);
             }
         }
@@ -70,6 +86,8 @@ public class Attendee {
         return temp;
 
     }
+
+
 
 
 }

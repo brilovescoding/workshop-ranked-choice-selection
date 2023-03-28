@@ -15,4 +15,8 @@ public enum WorkshopSessions {
 
         return null;
     }
+
+    public char getChar() {
+        return name;
+    }
 }

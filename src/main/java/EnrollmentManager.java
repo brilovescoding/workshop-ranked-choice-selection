@@ -157,17 +157,34 @@ public class EnrollmentManager {
         for (int preferenceLevel = 1; preferenceLevel <= 5; preferenceLevel++) {
             //for each workshop, place each preference level in turn
             for (Workshop workshop : workshopList) {
-                WorkshopSessions[] availableSessions = workshop.get
+                ArrayList<WorkshopSessions> availableSessions = workshop.getListOfAvailableSessions();
                 //for each available workshop session
+                for (WorkshopSessions sessionChar: availableSessions) {
+                    ArrayList<Attendee> attendees;
+                    attendees = getListOfAvailableAttendeesByPreference(workshop, sessionChar, preferenceLevel);
 
+                    for (int j = workshop.getNumberOfOpenSpots(sessionChar); j > 0; j--) {
+                        if (attendees.size() > 0) {
+                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
+                            workshop.addAttendee(sessionChar, randomAttendee);
+                            randomAttendee.setWorkshop(workshop, sessionChar);
+                            if (!randomAttendee.isAvailable()) {
+                                scheduledAttendees.add(randomAttendee);
+                            }
+                        }
+                    }
+
+
+                }
                 //get the attendees who listed this workshop as the one they wanted
                 //match the name they put for the first item in attendance.workshopPreferences to the
                 //name of the given workshop
-                ArrayList<Attendee> attendees;
+
+
 
                 if (workshop instanceof SingleSessionWorkshop) {
                     SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
-                    attendees = getListOfAttendeesByPreference(s, preferenceLevel);
+
                     for (int j = s.getNumberOfAttendees(); j < s.getMaxAttendance(); j++) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
@@ -320,8 +337,8 @@ public class EnrollmentManager {
 
     //parameter: a Workshop and a pref num that is from 1 - 5
     //return: ArrayList of attendees that listed that specific workshopID at that specific preference #
-    //Attendees must also be open during that timeslot in order to be added to that list
-    public ArrayList<Attendee> getListOfAttendeesByPreference(SingleSessionWorkshop workshop, int prefNum) {
+    //Attendees must also be open during that session in order to be added to that list
+    public ArrayList<Attendee> getListOfAvailableAttendeesByPreference(Workshop workshop, WorkshopSessions sessionChar, int prefNum) {
         prefNum--; //for array index
         String workshopName = workshop.getName();
         ArrayList<Attendee> tempList = new ArrayList<Attendee>();
@@ -331,38 +348,8 @@ public class EnrollmentManager {
             //check first to see if the name matches
             if (preference.equals(workshopName)) {
                 //if single session, check if student is available for that session
-                if (workshop instanceof SingleSessionWorkshop) {
-                    SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
-                    if (s.getSession() == 'A' && attendee.getWorkshopA() == null) {
-                        tempList.add(attendee);
-                    } else if (s.getSession() == 'B' && attendee.getWorkshopB() == null) {
-                        tempList.add(attendee);
-                    }
-                }
-            }
-        }
-        return tempList;
-    }
-
-    //overloaded version of above method that works for Double Session workshops, which
-    //helps to avoid issues of double booking individuals for both Session A and Session B
-    public ArrayList<Attendee> getListOfAttendeesByPreference(DoubleSessionWorkshop workshop, int prefNum, char session) {
-        prefNum--; //for array index
-        String workshopName = workshop.getName();
-        ArrayList<Attendee> tempList = new ArrayList<Attendee>();
-
-        for (Attendee attendee : this.attendeeList){
-            String preference = attendee.getWorkshopPreferences()[prefNum];
-            //check first to see if the name matches
-            if (preference.equals(workshopName)) {
-                if (workshop instanceof DoubleSessionWorkshop) {
-                    //ensures they are available and they aren't already booked for the same workshop in another session
-                    if (attendee.getWorkshopA() == null && session == 'A' && attendee.getWorkshopB() != workshop) {
-                        tempList.add(attendee);
-                    }
-                    else if (attendee.getWorkshopB() == null && session == 'B' && attendee.getWorkshopA() != workshop) {
-                        tempList.add(attendee);
-                    }
+                if (attendee.isAvailable(sessionChar)) {
+                    tempList.add(attendee);
                 }
             }
         }

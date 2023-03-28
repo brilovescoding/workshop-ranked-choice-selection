@@ -55,30 +55,43 @@ public class Workshop {
         return description;
     }
 
-    public HashMap<WorkshopSessions, ArrayList<Attendee>> getAttendees() {
-        return sessionAttendees;
+    public ArrayList<Attendee> getAttendees(WorkshopSessions session) {
+            return sessionAttendees.get(session);
+    }
+
+    public void addAttendee(WorkshopSessions session, Attendee a) {
+        sessionAttendees.get(session).add(a);
+    }
+
+    public int getNumberOfAttendees(WorkshopSessions session) {
+        return this.sessionAttendees.get(session).size();
     }
 
     public int getNumberOfOpenSpots(WorkshopSessions session) {
-        return getMaxAttendance() - this.sessionAttendees.get(session).size();
+        return getMaxAttendance() - getNumberOfAttendees(session);
     }
 
     //returns arraylist of keys for available workshop sessions
+    //TODO: Where am I using this?
+    //I guess I am using it when placing a student in that workshop, to see if there is an available session for them
+    //I also want to ensure that they are not already scheduled for a different session
+    //I need the key because I need to loop through each letter of a workshop to determine
+    //that each student only gets one of each
+
     public ArrayList<WorkshopSessions> getListOfAvailableSessions() {
         ArrayList<WorkshopSessions> temp = new ArrayList<WorkshopSessions>();
-        //for each session (loop through hashmap):
-        for (ArrayList<Attendee> a: sessionAttendees.values()) {
-            Workshop w = workshops.get(sessionChar);
-            if (w != null && w.getAttendees().size() < w.getMaxAttendance()) {
-                temp.put(sessionChar, w);
+        //for each session (loop through each arrayList of attendees in the Hashmap):
+
+        sessionAttendees.forEach( (sessionKey, sessionArrayList) -> {
+            if (sessionArrayList.size() < this.getMaxAttendance()) {
+                temp.add(sessionKey);
             }
-        }
+        });
+
         //if it's not null AND the attendance is not max, add it to the ArrayList, then return
         if (temp.isEmpty()) {
             return null;
         }
-
         return temp;
-
     }
 }
