@@ -62,10 +62,9 @@ public class EnrollmentManager {
         return freeTalks;
     }
 
-    //Only sorts DoubleSession workshops by comparing number of attendees
-//    public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, char session) {
-//        listToBeSorted.sort((o1, o2) -> ((DoubleSessionWorkshop) o1).getNumberOfAttendees(session) - ((DoubleSessionWorkshop) o2).getNumberOfAttendees(session));
-//    }
+    public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, WorkshopSessions session) {
+        listToBeSorted.sort((o1, o2) -> (o1.getNumberOfAttendees(session) - (o2).getNumberOfAttendees(session)));
+    }
 
     //method takes in a filepath, imports the file into a List of String arrays,
     // (one for each row), and changes each into a list of Workshops and Attendees
@@ -188,6 +187,41 @@ public class EnrollmentManager {
             }
         }
 
+        ArrayList<Workshop> freeTalks = getFreeTalkSessions();
+
+        //loop through leftover attendee list to schedule each attendee one at a time
+        for (Attendee leftover: leftovers) {
+            HashMap<WorkshopSessions, Workshop> availableSessions = leftover.getListOfAvailableSessions();
+            //for each missing workshop a student has,
+            for (Map.Entry<WorkshopSessions, Workshop> entry : availableSessions.entrySet()) {
+                WorkshopSessions sessionChar = entry.getKey();
+                Workshop workshop = entry.getValue();
+                //use a while loop to traverse this list until the student has been scheduled, then exit
+                //find the lowest attended workshop that the student isn't already scheduled for
+                //add student to that workshop
+                sortWorkshopListByAttendance(freeTalks, sessionChar);
+                while (!leftover.isAvailable(sessionChar)) {
+                    int workshopIndex = 0;
+                    if (!leftover.isStudentAlreadyInWorkshop(workshop)) {
+                        workshop.addAttendee(sessionChar, leftover);
+                        leftover.setWorkshop(workshop, sessionChar);
+                    }
+                    workshopIndex++;
+                    if (workshopIndex > freeTalks.size())  {
+                        throw new IndexOutOfBoundsException();
+                    }
+                }
+            }
+            //if the above code works correctly then this should remove them from the list.
+            if (!leftover.isAvailable()) {
+                leftovers.remove(leftover);
+            }
+        }
+
+
+
+
+
         //place students in available workshops
         //three groups: students only available for workshopA, students only for workshopB, and students
         //with no placements
@@ -196,89 +230,12 @@ public class EnrollmentManager {
         ArrayList<Attendee> availableWorkshopB = new ArrayList<Attendee>();
         ArrayList<Attendee> availableWorkshopAandB = new ArrayList<Attendee>();
 
-        for (Attendee person: leftovers) {
-            if (person.getWorkshopA() == null && person.getWorkshopB() == null) {
-                availableWorkshopAandB.add(person);
-            }
-            else if (person.getWorkshopA() == null) {
-                availableWorkshopA.add(person);
-            }
-            else if (person.getWorkshopB() == null) {
-                availableWorkshopB.add(person);
-            }
-        }
 
         //System.out.println(availableWorkshopA.size());
         //System.out.println(availableWorkshopB.size());
         //System.out.println(availableWorkshopAandB.size());
         System.out.println(leftovers.size());
 
-        //NOTE: THIS ONLY WORKS FOR DOUBLE SESSION WORKSHOPS BECAUSE OF TIME CONSTRAINTS
-        //ADD IN SINGLE SESSION SUPPORT LATER
-        //first, sort the list of freeTalks
-        //for students open for workshopA only, add them to the lowest attended free workshop session for session A
-        //if they are already in that workshop, then put them in the second-most attended workshop
-        ArrayList<Workshop> freeTalks = getFreeTalkSessions();
-        for (Attendee person: availableWorkshopA) {
-            sortWorkshopListByAttendance(freeTalks, 'A');
-            DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
-            DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
-            System.out.println("Lowest is " + freeTalks.get(0).getName() + " at " + ((DoubleSessionWorkshop) freeTalks.get(0)).getNumberOfAttendees('A'));
-            System.out.println("Second lowest is " + freeTalks.get(1).getName() + " at " + ((DoubleSessionWorkshop) freeTalks.get(1)).getNumberOfAttendees('A'));
-            if (person.getWorkshopB().equals(lowest)) {
-                secondLowest.addAttendee(person, 'A');
-                person.setWorkshop(secondLowest, 'A');
-            }
-            else {
-                lowest.addAttendee(person, 'A');
-                person.setWorkshop(lowest, 'A');
-            }
-
-            leftovers.remove(person);
-            scheduledAttendees.add(person);
-        }
-
-        for (Attendee person: availableWorkshopB) {
-            sortWorkshopListByAttendance(freeTalks, 'B');
-            DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
-            DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
-            if (person.getWorkshopA().equals(lowest)) {
-                secondLowest.addAttendee(person, 'B');
-                person.setWorkshop(secondLowest, 'B');
-            }
-            else {
-                lowest.addAttendee(person, 'B');
-                person.setWorkshop(lowest, 'B');
-            }
-
-            leftovers.remove(person);
-            scheduledAttendees.add(person);
-        }
-
-        for (Attendee person: availableWorkshopAandB) {
-            sortWorkshopListByAttendance(freeTalks, 'A');
-            DoubleSessionWorkshop lowest = (DoubleSessionWorkshop) freeTalks.get(0);
-            DoubleSessionWorkshop secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
-
-            lowest.addAttendee(person, 'A');
-            person.setWorkshop(lowest, 'A');
-
-
-            sortWorkshopListByAttendance(freeTalks, 'B');
-            lowest = (DoubleSessionWorkshop) freeTalks.get(0);
-            secondLowest = (DoubleSessionWorkshop) freeTalks.get(1);
-            if (person.getWorkshopA().equals(lowest)) {
-                secondLowest.addAttendee(person, 'B');
-                person.setWorkshop(secondLowest, 'B');
-            }
-            else {
-                lowest.addAttendee(person, 'B');
-                person.setWorkshop(lowest, 'B');
-            }
-
-            leftovers.remove(person);
-            scheduledAttendees.add(person);
-        }
 
         System.out.println("Number of LeftOvers: " + leftovers.size());
     }
