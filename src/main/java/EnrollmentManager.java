@@ -173,59 +173,7 @@ public class EnrollmentManager {
                             }
                         }
                     }
-
-
                 }
-                //get the attendees who listed this workshop as the one they wanted
-                //match the name they put for the first item in attendance.workshopPreferences to the
-                //name of the given workshop
-
-
-
-                if (workshop instanceof SingleSessionWorkshop) {
-                    SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
-
-                    for (int j = s.getNumberOfAttendees(); j < s.getMaxAttendance(); j++) {
-                        if (attendees.size() > 0) {
-                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
-                            s.addAttendee(randomAttendee);
-                            randomAttendee.setWorkshop(workshop, s.getSession());
-                            attendees.remove(randomAttendee);
-                            //if scheduled for both sessions, remove the attendee
-                            if (!randomAttendee.isAvailable()) {
-                                scheduledAttendees.add(randomAttendee);
-                            }
-                        }
-                    }
-                } else if (workshop instanceof DoubleSessionWorkshop) {
-                    DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
-                    //first handle Session A
-                    attendees = getListOfAttendeesByPreference(d, preferenceLevel, 'A');
-                    for (int j = d.getNumberOfAttendees('A'); j < d.getMaxAttendance(); j++) {
-                        if (attendees.size() > 0) {
-                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
-                            d.addAttendee(randomAttendee, 'A');
-                            randomAttendee.setWorkshop(workshop, 'A');
-                            attendees.remove(randomAttendee);
-                            if (!randomAttendee.isAvailable()) {
-                                scheduledAttendees.add(randomAttendee);                            }
-                        }
-                    }
-
-                    //then Session B
-                    attendees = getListOfAttendeesByPreference(d, preferenceLevel, 'B');
-                    for (int j = d.getNumberOfAttendees('B'); j < d.getMaxAttendance(); j++) {
-                        if (attendees.size() > 0) {
-                            Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
-                            d.addAttendee(randomAttendee, 'B');
-                            randomAttendee.setWorkshop(workshop, 'B');
-                            attendees.remove(randomAttendee);
-                            if (!randomAttendee.isAvailable()) {
-                                scheduledAttendees.add(randomAttendee);                            }
-                        }
-                    }
-                }
-
             }
         }
 
