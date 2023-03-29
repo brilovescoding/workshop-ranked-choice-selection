@@ -28,6 +28,9 @@ public class Attendee {
         return workshops.get(sessionChar);
     }
 
+    public HashMap<WorkshopSessions, Workshop> getWorkshops() {
+        return this.workshops;
+    }
     public void setWorkshop(Workshop w, WorkshopSessions ws) {
         workshops.put(ws, w);
     }

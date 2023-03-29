@@ -269,32 +269,33 @@ public class EnrollmentManager {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
 
         for (Attendee attendee : scheduledAttendees) {
-            String workshopAName = "None", workshopBName = "None";
-            String workshopALocation = "None", workshopBLocation = "None";
-            String workshopADescription = "None", workshopBDescription = "None";
-            if (attendee.getWorkshopA() != null) {
-                workshopAName = attendee.getWorkshopA().getName();
-                workshopALocation = attendee.getWorkshopA().getLocation();
-                workshopADescription = attendee.getWorkshopA().getDescription();
-            }
-            if (attendee.getWorkshopB() != null) {
-                workshopBName = attendee.getWorkshopB().getName();
-                workshopBLocation = attendee.getWorkshopB().getLocation();
-                workshopBDescription = attendee.getWorkshopB().getDescription();
-            }
-            String[] dataRow = {
-                    attendee.getEmailAddress(),
-                    attendee.getName(),
-                    Integer.toString(attendee.getGrade()),
-                    workshopAName,
-                    workshopALocation,
-                    workshopADescription,
-                    workshopBName,
-                    workshopBLocation,
-                    workshopBDescription
-            };
-            attendeeFinalData.add(dataRow);
+            ArrayList<String> dataRow = new ArrayList<String>();
+            dataRow.add(attendee.getEmailAddress());
+            dataRow.add(attendee.getName());
+            dataRow.add(Integer.toString(attendee.getGrade()));
 
+            for (WorkshopSessions wss: WorkshopSessions.values()) {
+                Workshop w = attendee.getWorkshop(wss);
+                //if workshop exists, add workshop info
+                if (w != null) {
+                    dataRow.add(w.getName());
+                    dataRow.add(w.getLocation());
+                    dataRow.add(w.getDescription());
+                }
+                else {
+                    int NUM_COLS_FOR_WORKSHOP = 3;
+                    for (int i = 0; i < NUM_COLS_FOR_WORKSHOP; i++) {
+                        dataRow.add("None");
+                    }
+                }
+            }
+
+            for (Workshop w: attendee.getWorkshops().values()) {
+                dataRow.add(w.getName());
+                dataRow.add(w.getLocation());
+                dataRow.add(w.getDescription());
+            }
+            attendeeFinalData.add((String[]) dataRow.toArray());
         }
 
         //convert list of Attendees to a list of Strings
