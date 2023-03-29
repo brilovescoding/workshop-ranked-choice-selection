@@ -6,13 +6,7 @@ import com.opencsv.*;
 
 //class will contain methods for importing attendance and workshop data
 public class EnrollmentManager {
-//    public static ArrayList<WorkshopSessions> getListOfAvailableSessions() {
-//        ArrayList<WorkshopSessions> temp = new ArrayList<WorkshopSessions>();
-//        workshopList.forEach((k, v)
-//                -> if () //if the workshop is available then add to temp
-//        )
-//        return temp;
-//    }
+
     public final static int NUMBER_OF_WORKSHOP_SESSIONS = 3;
     private static ArrayList<Workshop> workshopList;
     private final ArrayList<Attendee> attendeeList;
