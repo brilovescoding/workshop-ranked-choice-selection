@@ -39,7 +39,7 @@ public class EnrollmentManager {
         double sum = 0.0;
 
         for (int i = 0; i < workshopList.size(); i++) {
-            sum += ((DoubleSessionWorkshop)workshopList.get(i)).getNumberOfAttendees(session);
+            sum += workshopList.get(i).getNumberOfAttendees(WorkshopSessions.getSessionEnumByChar(session));
         }
 
         // getting the mean of array.
@@ -48,7 +48,7 @@ public class EnrollmentManager {
         // calculating the standard deviation
         double standardDeviation = 0.0;
         for (int i = 0; i < workshopList.size(); i++) {
-            standardDeviation += Math.pow(((DoubleSessionWorkshop)workshopList.get(i)).getNumberOfAttendees(session) - mean, 2);
+            standardDeviation += Math.pow(workshopList.get(i).getNumberOfAttendees(WorkshopSessions.getSessionEnumByChar(session)) - mean, 2);
 
         }
 
@@ -392,22 +392,28 @@ public class EnrollmentManager {
         List<String[]> attendeeFinalData = new ArrayList<String[]>();
 
         for (Attendee attendee : leftovers) {
-            String workshopAInfo = "None", workshopBInfo = "None";
-            if (attendee.getWorkshopA() != null) {
-                workshopAInfo = attendee.getWorkshopA().getName() + " (" + attendee.getWorkshopA().getLocation() + ")";
-            }
-            if (attendee.getWorkshopB() != null) {
-                workshopBInfo = attendee.getWorkshopB().getName() + " (" + attendee.getWorkshopB().getLocation() + ")";
 
+            ArrayList<String> dataRow = new ArrayList<String>();
+            dataRow.add(attendee.getEmailAddress());
+            dataRow.add(attendee.getName());
+            dataRow.add(Integer.toString(attendee.getGrade()));
+            for (WorkshopSessions wss: WorkshopSessions.values()) {
+                Workshop w = attendee.getWorkshop(wss);
+                //if workshop exists, add workshop info
+                if (w != null) {
+                    dataRow.add(w.getName());
+                    dataRow.add(w.getLocation());
+                    dataRow.add(w.getDescription());
+                }
+                else {
+                    int NUM_COLS_FOR_WORKSHOP = 3;
+                    for (int i = 0; i < NUM_COLS_FOR_WORKSHOP; i++) {
+                        dataRow.add("None");
+                    }
+                }
             }
-            String[] dataRow = {
-                    attendee.getEmailAddress(),
-                    attendee.getName(),
-                    Integer.toString(attendee.getGrade()),
-                    workshopAInfo,
-                    workshopBInfo
-            };
-            attendeeFinalData.add(dataRow);
+
+            attendeeFinalData.add((String[]) dataRow.toArray());
 
         }
 
