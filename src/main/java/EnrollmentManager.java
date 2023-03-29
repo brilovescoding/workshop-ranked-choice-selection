@@ -217,27 +217,6 @@ public class EnrollmentManager {
                 leftovers.remove(leftover);
             }
         }
-
-
-
-
-
-        //place students in available workshops
-        //three groups: students only available for workshopA, students only for workshopB, and students
-        //with no placements
-
-        ArrayList<Attendee> availableWorkshopA = new ArrayList<Attendee>();
-        ArrayList<Attendee> availableWorkshopB = new ArrayList<Attendee>();
-        ArrayList<Attendee> availableWorkshopAandB = new ArrayList<Attendee>();
-
-
-        //System.out.println(availableWorkshopA.size());
-        //System.out.println(availableWorkshopB.size());
-        //System.out.println(availableWorkshopAandB.size());
-        System.out.println(leftovers.size());
-
-
-        System.out.println("Number of LeftOvers: " + leftovers.size());
     }
 
     //parameter: a Workshop and a pref num that is from 1 - 5
