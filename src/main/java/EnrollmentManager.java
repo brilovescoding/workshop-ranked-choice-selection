@@ -15,9 +15,9 @@ public class EnrollmentManager {
 //    }
     public final static int NUMBER_OF_WORKSHOP_SESSIONS = 3;
     private static ArrayList<Workshop> workshopList;
-    private ArrayList<Attendee> attendeeList;
-    private ArrayList<Attendee> scheduledAttendees;
-    private ArrayList<Attendee> leftovers;
+    private final ArrayList<Attendee> attendeeList;
+    private final ArrayList<Attendee> scheduledAttendees;
+    private final ArrayList<Attendee> leftovers;
 
     public void printAttendees() {
         System.out.println(attendeeList);
@@ -28,18 +28,18 @@ public class EnrollmentManager {
     }
 
     public EnrollmentManager() {
-        workshopList = new ArrayList<Workshop>();
-        attendeeList = new ArrayList<Attendee>();
-        scheduledAttendees = new ArrayList<Attendee>();
-        leftovers = new ArrayList<Attendee>();
+        workshopList = new ArrayList<>();
+        attendeeList = new ArrayList<>();
+        scheduledAttendees = new ArrayList<>();
+        leftovers = new ArrayList<>();
     }
     public double calculateStandardDeviationOfAttendance(char session) {
 
         // finding the sum of array values
         double sum = 0.0;
 
-        for (int i = 0; i < workshopList.size(); i++) {
-            sum += workshopList.get(i).getNumberOfAttendees(WorkshopSessions.getSessionEnumByChar(session));
+        for (Workshop w: workshopList) {
+            sum += w.getNumberOfAttendees(WorkshopSessions.getSessionEnumByChar(session));
         }
 
         // getting the mean of array.
@@ -47,15 +47,15 @@ public class EnrollmentManager {
 
         // calculating the standard deviation
         double standardDeviation = 0.0;
-        for (int i = 0; i < workshopList.size(); i++) {
-            standardDeviation += Math.pow(workshopList.get(i).getNumberOfAttendees(WorkshopSessions.getSessionEnumByChar(session)) - mean, 2);
+        for (Workshop w: workshopList) {
+            standardDeviation += Math.pow(w.getNumberOfAttendees(WorkshopSessions.getSessionEnumByChar(session)) - mean, 2);
 
         }
 
         return Math.sqrt(standardDeviation/workshopList.size());
     }
     public static ArrayList<Workshop> getFreeTalkSessions() {
-        ArrayList<Workshop> freeTalks = new ArrayList<Workshop>();
+        ArrayList<Workshop> freeTalks = new ArrayList<>();
         for (Workshop w: workshopList) {
             if (w.isFreeTalk()) { freeTalks.add(w); }
         }
@@ -219,13 +219,13 @@ public class EnrollmentManager {
         }
     }
 
-    //parameter: a Workshop and a pref num that is from 1 - 5
+    //parameter: a Workshop and a pref num that is from 1 to 5
     //return: ArrayList of attendees that listed that specific workshopID at that specific preference #
     //Attendees must also be open during that session in order to be added to that list
     public ArrayList<Attendee> getListOfAvailableAttendeesByPreference(Workshop workshop, WorkshopSessions sessionChar, int prefNum) {
         prefNum--; //for array index
         String workshopName = workshop.getName();
-        ArrayList<Attendee> tempList = new ArrayList<Attendee>();
+        ArrayList<Attendee> tempList = new ArrayList<>();
 
         for (Attendee attendee : this.attendeeList){
             String preference = attendee.getWorkshopPreferences()[prefNum];
@@ -266,10 +266,10 @@ public class EnrollmentManager {
     //Column H: Attendee's Workshop B location
     //Column I: Attendee's Workshop B description
     public void convertAttendeeDataToCSV() throws Exception {
-        List<String[]> attendeeFinalData = new ArrayList<String[]>();
+        List<String[]> attendeeFinalData = new ArrayList<>();
 
         for (Attendee attendee : scheduledAttendees) {
-            ArrayList<String> dataRow = new ArrayList<String>();
+            ArrayList<String> dataRow = new ArrayList<>();
             dataRow.add(attendee.getEmailAddress());
             dataRow.add(attendee.getName());
             dataRow.add(Integer.toString(attendee.getGrade()));
@@ -329,11 +329,11 @@ public class EnrollmentManager {
     //Column G: Workshop Session B Attendees String
     //Column H: Workshop Session B Attendance #
     public void convertWorkshopDataToCSV() throws Exception {
-        List<String[]> workshopFinalData = new ArrayList<String[]>();
+        List<String[]> workshopFinalData = new ArrayList<>();
 
         for (Workshop workshop : workshopList) {
 
-            ArrayList<String> dataRow = new ArrayList<String>();
+            ArrayList<String> dataRow = new ArrayList<>();
             dataRow.add(workshop.getModerators());
             dataRow.add(workshop.getName());
             dataRow.add(workshop.getLocation());
@@ -389,11 +389,11 @@ public class EnrollmentManager {
     //Column D: Attendee's Workshop A name and URL
     //Column E: Attendee's Workshop B name and URL
     public void convertLeftoverDataToCSV() throws Exception {
-        List<String[]> attendeeFinalData = new ArrayList<String[]>();
+        List<String[]> attendeeFinalData = new ArrayList<>();
 
         for (Attendee attendee : leftovers) {
 
-            ArrayList<String> dataRow = new ArrayList<String>();
+            ArrayList<String> dataRow = new ArrayList<>();
             dataRow.add(attendee.getEmailAddress());
             dataRow.add(attendee.getName());
             dataRow.add(Integer.toString(attendee.getGrade()));
