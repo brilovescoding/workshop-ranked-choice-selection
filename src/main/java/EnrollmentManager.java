@@ -332,59 +332,7 @@ public class EnrollmentManager {
         List<String[]> workshopFinalData = new ArrayList<String[]>();
 
         for (Workshop workshop : workshopList) {
-            String workshopA = "";
-            String workshopB = "";
-            int attendanceA = 0, attendanceB = 0;
-            if (workshop instanceof SingleSessionWorkshop) {
-                SingleSessionWorkshop s = (SingleSessionWorkshop) workshop;
-                ArrayList<Attendee> attendeeList = s.getAttendees();
-                if (s.getSession() == 'A') {
-                    attendanceA = attendeeList.size();
-                }
-                else {
-                    attendanceB = attendeeList.size();
-                }
-                for (Attendee a : attendeeList) {
-                    if (s.getSession() == 'A') {
-                        workshopA += a.getName();
-                        workshopA += ";";
-                    }
-                    else if (s.getSession() == 'B') {
-                        workshopB += a.getName();
-                        workshopB += ";";
-                    }
-                    else {
-                        System.out.println("Something went wrong...");
 
-                    }
-                }
-            }
-            else if (workshop instanceof DoubleSessionWorkshop) {
-                DoubleSessionWorkshop d = (DoubleSessionWorkshop) workshop;
-                ArrayList<Attendee> attendeeListA = d.getAttendees('A');
-                ArrayList<Attendee> attendeeListB = d.getAttendees('B');
-                attendanceA = attendeeListA.size();
-                attendanceB = attendeeListB.size();
-                for (Attendee a : attendeeListA) {
-                    workshopA += a.getName();
-                    workshopA += ";";
-                }
-                for (Attendee a : attendeeListB) {
-                    workshopB += a.getName();
-                    workshopB += ";";
-                }
-
-            }
-//            String[] dataRow = {
-//                    workshop.getModerators(),
-//                    workshop.getName(),
-//                    workshop.getLocation(),
-//                    workshop.getPresenters(),
-//                    workshopA,
-//                    String.valueOf(attendanceA),
-//                    workshopB,
-//                    String.valueOf(attendanceB)
-//            };
             ArrayList<String> dataRow = new ArrayList<String>();
             dataRow.add(workshop.getModerators());
             dataRow.add(workshop.getName());
