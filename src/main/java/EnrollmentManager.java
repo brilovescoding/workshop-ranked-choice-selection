@@ -375,17 +375,42 @@ public class EnrollmentManager {
                 }
 
             }
-            String[] dataRow = {
-                    workshop.getModerators(),
-                    workshop.getName(),
-                    workshop.getLocation(),
-                    workshop.getPresenters(),
-                    workshopA,
-                    String.valueOf(attendanceA),
-                    workshopB,
-                    String.valueOf(attendanceB)
-            };
-            workshopFinalData.add(dataRow);
+//            String[] dataRow = {
+//                    workshop.getModerators(),
+//                    workshop.getName(),
+//                    workshop.getLocation(),
+//                    workshop.getPresenters(),
+//                    workshopA,
+//                    String.valueOf(attendanceA),
+//                    workshopB,
+//                    String.valueOf(attendanceB)
+//            };
+            ArrayList<String> dataRow = new ArrayList<String>();
+            dataRow.add(workshop.getModerators());
+            dataRow.add(workshop.getName());
+            dataRow.add(workshop.getLocation());
+            dataRow.add(workshop.getPresenters());
+
+            //for each active session
+            for (WorkshopSessions wss: WorkshopSessions.values()) {
+                //if not null and there is someone attending,
+                ArrayList<Attendee> attendees = workshop.getAttendees(wss);
+                if (attendees != null && attendees.size() > 0) {
+                    StringBuilder stringifier = new StringBuilder();
+                    for (Attendee attendee: attendees) {
+                        stringifier.append(attendee.getName()).append(";");
+                    }
+                    dataRow.add(stringifier.toString());
+                    dataRow.add(String.valueOf(attendees.size()));
+                }
+                else {
+                    dataRow.add("Empty");
+                    dataRow.add("Empty");
+                }
+
+            }
+
+            workshopFinalData.add((String[]) dataRow.toArray());
 
         }
 
