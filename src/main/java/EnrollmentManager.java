@@ -134,8 +134,8 @@ public class EnrollmentManager {
         for (String[] attendeeRow: attendeeData) {
             attendeeList.add(new Attendee(
                     attendeeRow[0],
-                    attendeeRow[2], //reversed these two columns to match data
-                    Integer.parseInt(attendeeRow[1]),
+                    attendeeRow[1],
+                    Integer.parseInt(attendeeRow[2]),
                     new String[] {attendeeRow[3], attendeeRow[4], attendeeRow[5], attendeeRow[6], attendeeRow[7]}
             ));
         }
@@ -158,18 +158,20 @@ public class EnrollmentManager {
                 for (WorkshopSessions sessionChar: availableSessions) {
                     ArrayList<Attendee> attendees;
                     attendees = getListOfAvailableAttendeesByPreference(workshop, sessionChar, preferenceLevel);
-
+                    System.out.println("Attendees who prefer " + workshop.getName() + " as preference " + preferenceLevel + ": " + attendees);
                     for (int j = workshop.getNumberOfOpenSpots(sessionChar); j > 0; j--) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                             workshop.addAttendee(sessionChar, randomAttendee);
                             randomAttendee.setWorkshop(workshop, sessionChar);
+                            attendees.remove(randomAttendee);
+                            System.out.println("Attendee scheduled: "+ randomAttendee.getName() + " for " + workshop.getName());
                             if (!randomAttendee.isAvailable()) {
                                 scheduledAttendees.add(randomAttendee);
                             }
                         }
                     }
-                    System.out.println("Schedule for " + workshop.getName() + " for Session" + sessionChar.getChar() + ": " + workshop.getAttendees(sessionChar));
+                    System.out.println("Schedule for " + workshop.getName() + " for Session" + sessionChar.getChar() + " and Preference " + preferenceLevel + ": " + workshop.getAttendees(sessionChar));
                 }
             }
         }
