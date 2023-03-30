@@ -56,6 +56,8 @@ public class EnrollmentManager {
         return freeTalks;
     }
 
+
+
     public static void sortWorkshopListByAttendance(ArrayList<Workshop> listToBeSorted, WorkshopSessions session) {
         listToBeSorted.sort((o1, o2) -> (o1.getNumberOfAttendees(session) - (o2).getNumberOfAttendees(session)));
     }
@@ -80,9 +82,10 @@ public class EnrollmentManager {
         try {
             final CSVParser parser = new CSVParserBuilder()
                     .withSeparator('\t')
+                    .withIgnoreQuotations(true)
                     .build();
             final CSVReader reader = new CSVReaderBuilder(new FileReader(filepath))
-                    .withSkipLines(0)
+                    .withSkipLines(1)
                     .withCSVParser(parser)
                     .build();
             return reader.readAll();
@@ -131,8 +134,8 @@ public class EnrollmentManager {
         for (String[] attendeeRow: attendeeData) {
             attendeeList.add(new Attendee(
                     attendeeRow[0],
-                    attendeeRow[1],
-                    Integer.parseInt(attendeeRow[2]),
+                    attendeeRow[2], //reversed these two columns to match data
+                    Integer.parseInt(attendeeRow[1]),
                     new String[] {attendeeRow[3], attendeeRow[4], attendeeRow[5], attendeeRow[6], attendeeRow[7]}
             ));
         }
@@ -166,6 +169,7 @@ public class EnrollmentManager {
                             }
                         }
                     }
+                    System.out.println("Schedule for " + workshop.getName() + " for Session" + sessionChar.getChar() + ": " + workshop.getAttendees(sessionChar));
                 }
             }
         }
@@ -289,7 +293,7 @@ public class EnrollmentManager {
                 dataRow.add(w.getLocation());
                 dataRow.add(w.getDescription());
             }
-            attendeeFinalData.add((String[]) dataRow.toArray());
+            attendeeFinalData.add(dataRow.toArray(new String[0]));
         }
 
         //convert list of Attendees to a list of Strings
@@ -352,7 +356,7 @@ public class EnrollmentManager {
 
             }
 
-            workshopFinalData.add((String[]) dataRow.toArray());
+            workshopFinalData.add(dataRow.toArray(new String[0]));
 
         }
 
@@ -407,7 +411,7 @@ public class EnrollmentManager {
                 }
             }
 
-            attendeeFinalData.add((String[]) dataRow.toArray());
+            attendeeFinalData.add(dataRow.toArray(new String[0]));
 
         }
 

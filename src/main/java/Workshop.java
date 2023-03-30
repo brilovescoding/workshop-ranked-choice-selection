@@ -72,7 +72,6 @@ public class Workshop {
     }
 
     //returns arraylist of keys for available workshop sessions
-    //TODO: Where am I using this?
     //I guess I am using it when placing a student in that workshop, to see if there is an available session for them
     //I also want to ensure that they are not already scheduled for a different session
     //I need the key because I need to loop through each letter of a workshop to determine
@@ -90,7 +89,7 @@ public class Workshop {
 
         //if it's not null AND the attendance is not max, add it to the ArrayList, then return
         if (temp.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         return temp;
     }

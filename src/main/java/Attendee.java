@@ -57,7 +57,8 @@ public class Attendee {
 
     //returns true if student does not have a value associated with that key
     public boolean isAvailable(WorkshopSessions sessionChar) {
-        return getListOfAvailableSessions().get(sessionChar) == null ? true: false;
+        //TODO: HAVE GETLISTOFAVAILABLESESSIONS RETURN AN EMPTY HASHMAP B/C SAM SAID TO DO THIS <3
+        return (getListOfAvailableSessions().get(sessionChar) == null && getListOfAvailableSessions().get(sessionChar) == null) ? true: false;
     }
 
     public boolean isStudentAlreadyInWorkshop(Workshop w) {
@@ -83,7 +84,7 @@ public class Attendee {
         }
         //if it's not null AND the attendance is not max, add it to the ArrayList, then return
         if (temp.isEmpty()) {
-            return null;
+            return new HashMap<>();
         }
 
         return temp;
