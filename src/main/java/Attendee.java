@@ -22,7 +22,6 @@ public class Attendee {
         return workshopPreferences;
     }
 
-
     //gets Workshop assigned to student at that session
     public Workshop getWorkshop(WorkshopSessions sessionChar) {
         return workshops.get(sessionChar);
@@ -86,12 +85,6 @@ public class Attendee {
         if (temp.isEmpty()) {
             return new HashMap<>();
         }
-
         return temp;
-
     }
-
-
-
-
 }

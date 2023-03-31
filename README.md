@@ -7,10 +7,12 @@ The application supports having "Free Talks" - workshops where the attendance is
 
 ## Proposed Features
 [ ] Schedule for as many preferences as needed
+
 [ ] More flexible parsing of the CSV files
+
 [ ] Make all workshop fields customizable via a frontend interface
 
-### Data Format
+## Data Format
 
 Files should be imported as Tab-Separated Values files to avoid issues with commas being present in Workshop descriptions.
 
@@ -38,3 +40,7 @@ The resultant spreadsheet, a list of attendees, will be formatted as follows:
 - Column C: Attendee Grade
 - Column D: Attendee's Workshop A name and URL
 - Column E: Attendee's Workshop B name and URL
+
+## TODO:
+- Sort leftover students into the MOST populated workshop instead of the least populated
+- 8th graders should be not scheduled for Workshop A - create a way to account for this
