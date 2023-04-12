@@ -157,20 +157,20 @@ public class EnrollmentManager {
                 for (WorkshopSessions sessionChar: availableSessions) {
                     ArrayList<Attendee> attendees;
                     attendees = getListOfAvailableAttendeesByPreference(workshop, sessionChar, preferenceLevel);
-                    System.out.println("Attendees who prefer " + workshop.getName() + " as preference " + preferenceLevel + ": " + attendees);
+                    System.out.println("Attendees who prefer " + workshop.getName() + " as preference " + preferenceLevel + " for session " + sessionChar.getChar() + ": " + attendees);
                     for (int j = workshop.getNumberOfOpenSpots(sessionChar); j > 0; j--) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                             workshop.addAttendee(sessionChar, randomAttendee);
                             randomAttendee.setWorkshop(workshop, sessionChar);
                             attendees.remove(randomAttendee);
-                            System.out.println("Attendee scheduled: "+ randomAttendee.getName() + " for " + workshop.getName());
+                            System.out.println("Attendee scheduled: "+ randomAttendee.getName() + " for " + workshop.getName() + " on " + sessionChar.getChar());
                             if (!randomAttendee.isAvailable()) {
                                 scheduledAttendees.add(randomAttendee);
                             }
                         }
                     }
-                    System.out.println("Schedule for " + workshop.getName() + " for Session" + sessionChar.getChar() + " and Preference " + preferenceLevel + ": " + workshop.getAttendees(sessionChar));
+                    //System.out.println("Schedule for " + workshop.getName() + " for Session" + sessionChar.getChar() + " and Preference " + preferenceLevel + ": " + workshop.getAttendees(sessionChar));
                 }
             }
         }
@@ -185,9 +185,13 @@ public class EnrollmentManager {
                 leftovers.add(person);
             }
         }
+        System.out.println("leftovers");
+        System.out.println(leftovers);
+        for (Attendee a: leftovers) {
+            System.out.println(a);
+        }
 
         ArrayList<Workshop> freeTalks = getFreeTalkSessions();
-
         //loop through leftover attendee list to schedule each attendee one at a time
         for (Attendee leftover: leftovers) {
             HashMap<WorkshopSessions, Workshop> availableSessions = leftover.getListOfAvailableSessions();
@@ -199,8 +203,9 @@ public class EnrollmentManager {
                 //find the lowest attended workshop that the student isn't already scheduled for
                 //add student to that workshop
                 sortWorkshopListByAttendance(freeTalks, sessionChar);
-                while (!leftover.isAvailable(sessionChar)) {
-                    int workshopIndex = 0;
+                int workshopIndex = 0;
+                do  {
+
                     if (!leftover.isStudentAlreadyInWorkshop(workshop)) {
                         workshop.addAttendee(sessionChar, leftover);
                         leftover.setWorkshop(workshop, sessionChar);
@@ -209,7 +214,7 @@ public class EnrollmentManager {
                     if (workshopIndex > freeTalks.size())  {
                         throw new IndexOutOfBoundsException();
                     }
-                }
+                } while ((leftover.isAvailable(sessionChar)));
             }
             //if the above code works correctly then this should remove them from the list.
             if (!leftover.isAvailable()) {
@@ -230,8 +235,8 @@ public class EnrollmentManager {
             String preference = attendee.getWorkshopPreferences()[prefNum];
             //check first to see if the name matches
             if (preference.equals(workshopName)) {
-                //if single session, check if student is available for that session
-                if (attendee.isAvailable(sessionChar)) {
+                //check if student is available for that session
+                if (attendee.isAvailable(sessionChar) && !attendee.isStudentAlreadyInWorkshop(workshop)) {
                     tempList.add(attendee);
                 }
             }

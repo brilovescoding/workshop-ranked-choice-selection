@@ -1,4 +1,5 @@
-public enum WorkshopSessions {
+public enum WorkshopSessions
+{
     A('A'), B('B'), C('C');
 
     private final char name;
@@ -7,10 +8,10 @@ public enum WorkshopSessions {
         this.name = name;
     }
 
-    public static WorkshopSessions getSessionEnumByChar(final char name)
+    public static WorkshopSessions getSessionEnumByChar(final char n)
     {
         for (WorkshopSessions type : WorkshopSessions.values())
-            if (type.name == name)
+            if (type.name == n)
                 return type;
 
         return null;

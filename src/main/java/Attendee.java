@@ -13,7 +13,7 @@ public class Attendee {
         this.grade = grade;
         this.emailAddress = emailAddress;
         this.workshopPreferences = workshopPreferences;
-        this.workshops = new HashMap<WorkshopSessions, Workshop>(WorkshopSessions.values().length);
+        this.workshops = new HashMap<WorkshopSessions, Workshop>();
 
         //students get something in each Workshop slot. The length of the WorkshopSessions enum determines the maximum size of the Hashmap
     }
@@ -57,14 +57,16 @@ public class Attendee {
     //returns true if student does not have a value associated with that key
     public boolean isAvailable(WorkshopSessions sessionChar) {
         //TODO: HAVE GETLISTOFAVAILABLESESSIONS RETURN AN EMPTY HASHMAP B/C SAM SAID TO DO THIS <3
-        return (getListOfAvailableSessions().get(sessionChar) == null && getListOfAvailableSessions().get(sessionChar) == null) ? true: false;
+        System.out.println(getListOfAvailableSessions().get(sessionChar));
+        return (getListOfAvailableSessions().get(sessionChar) == null);
     }
 
     public boolean isStudentAlreadyInWorkshop(Workshop w) {
         //loop through workshops
         //if the workshop's reference matches another's, return true
         for (Workshop workshop: workshops.values()) {
-            if (workshop == w) {
+            if (workshop.getName().equals(w.getName())) {
+                System.out.println(this.name + " is already in " + workshop.getName());
                 return true;
             }
         }
@@ -81,10 +83,15 @@ public class Attendee {
                 temp.put(sessionChar, w);
             }
         }
+        System.out.println("For " + this.name + ": ");
+        System.out.println(temp.get(WorkshopSessions.A));
+        System.out.println(temp.get(WorkshopSessions.B));
+        System.out.println(temp.get(WorkshopSessions.C));
         //if it's not null AND the attendance is not max, add it to the ArrayList, then return
         if (temp.isEmpty()) {
             return new HashMap<>();
         }
+
         return temp;
     }
 }
