@@ -56,9 +56,7 @@ public class Attendee {
 
     //returns true if student does not have a value associated with that key
     public boolean isAvailable(WorkshopSessions sessionChar) {
-        //TODO: HAVE GETLISTOFAVAILABLESESSIONS RETURN AN EMPTY HASHMAP B/C SAM SAID TO DO THIS <3
-        System.out.println(getListOfAvailableSessions().get(sessionChar));
-        return (getListOfAvailableSessions().get(sessionChar) == null);
+        return (getListOfAvailableSessions().contains(sessionChar));
     }
 
     public boolean isStudentAlreadyInWorkshop(Workshop w) {
@@ -66,7 +64,7 @@ public class Attendee {
         //if the workshop's reference matches another's, return true
         for (Workshop workshop: workshops.values()) {
             if (workshop.getName().equals(w.getName())) {
-                System.out.println(this.name + " is already in " + workshop.getName());
+                //System.out.println(this.name + " is already in " + workshop.getName());
                 return true;
             }
         }
@@ -74,24 +72,16 @@ public class Attendee {
     }
 
     //returns available sessions for a given attendee
-    public HashMap<WorkshopSessions, Workshop> getListOfAvailableSessions() {
-        HashMap<WorkshopSessions, Workshop> temp = new HashMap<WorkshopSessions, Workshop>();
+    public ArrayList<WorkshopSessions> getListOfAvailableSessions() {
+        ArrayList<WorkshopSessions> temp = new ArrayList<>();
         //for each workshop session type (loop through enum):
         for (WorkshopSessions sessionChar: WorkshopSessions.values()) {
             Workshop w = workshops.get(sessionChar);
-            if (w != null && w.getAttendees(sessionChar).size() < w.getMaxAttendance()) {
-                temp.put(sessionChar, w);
+            //if (w != null && w.getAttendees(sessionChar).size() < w.getMaxAttendance()) {
+            if (w == null) { //wouldn't this fix it because, if the workshop gotten from the list for that sessoin is null, it's available?
+                temp.add(sessionChar);
             }
         }
-        System.out.println("For " + this.name + ": ");
-        System.out.println(temp.get(WorkshopSessions.A));
-        System.out.println(temp.get(WorkshopSessions.B));
-        System.out.println(temp.get(WorkshopSessions.C));
-        //if it's not null AND the attendance is not max, add it to the ArrayList, then return
-        if (temp.isEmpty()) {
-            return new HashMap<>();
-        }
-
         return temp;
     }
 }

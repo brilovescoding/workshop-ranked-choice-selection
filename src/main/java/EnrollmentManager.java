@@ -8,9 +8,9 @@ import com.opencsv.*;
 public class EnrollmentManager {
 
     private static ArrayList<Workshop> workshopList;
-    private final ArrayList<Attendee> attendeeList;
-    private final ArrayList<Attendee> scheduledAttendees;
-    private final ArrayList<Attendee> leftovers;
+    private  ArrayList<Attendee> attendeeList;
+    private  ArrayList<Attendee> scheduledAttendees;
+    private  ArrayList<Attendee> leftovers;
 
     public void printAttendees() {
         System.out.println(attendeeList);
@@ -193,22 +193,19 @@ public class EnrollmentManager {
 
         ArrayList<Workshop> freeTalks = getFreeTalkSessions();
         //loop through leftover attendee list to schedule each attendee one at a time
-        for (Attendee leftover: leftovers) {
-            HashMap<WorkshopSessions, Workshop> availableSessions = leftover.getListOfAvailableSessions();
+        for (int i = 0; i < leftovers.size(); i++) {
+            Attendee leftover = leftovers.get(i);
+            ArrayList<WorkshopSessions> availableSessions = leftover.getListOfAvailableSessions();
             //for each missing workshop a student has,
-            for (Map.Entry<WorkshopSessions, Workshop> entry : availableSessions.entrySet()) {
-                WorkshopSessions sessionChar = entry.getKey();
-                Workshop workshop = entry.getValue();
-                //use a while loop to traverse this list until the student has been scheduled, then exit
-                //find the lowest attended workshop that the student isn't already scheduled for
-                //add student to that workshop
+            for (WorkshopSessions sessionChar : availableSessions) {
+
                 sortWorkshopListByAttendance(freeTalks, sessionChar);
                 int workshopIndex = 0;
                 do  {
-
-                    if (!leftover.isStudentAlreadyInWorkshop(workshop)) {
-                        workshop.addAttendee(sessionChar, leftover);
-                        leftover.setWorkshop(workshop, sessionChar);
+                    Workshop w = workshopList.get(workshopIndex);
+                    if (!leftover.isStudentAlreadyInWorkshop(w)) {
+                        w.addAttendee(sessionChar, leftover);
+                        leftover.setWorkshop(w, sessionChar);
                     }
                     workshopIndex++;
                     if (workshopIndex > freeTalks.size())  {
@@ -219,6 +216,7 @@ public class EnrollmentManager {
             //if the above code works correctly then this should remove them from the list.
             if (!leftover.isAvailable()) {
                 leftovers.remove(leftover);
+                i--;
             }
         }
     }
