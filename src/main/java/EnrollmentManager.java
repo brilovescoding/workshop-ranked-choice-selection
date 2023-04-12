@@ -196,7 +196,7 @@ public class EnrollmentManager {
         for (int i = 0; i < leftovers.size(); i++) {
             Attendee leftover = leftovers.get(i);
             ArrayList<WorkshopSessions> availableSessions = leftover.getListOfAvailableSessions();
-            //for each missing workshop a student has,
+            //for each available workshop a student has,
             for (WorkshopSessions sessionChar : availableSessions) {
 
                 sortWorkshopListByAttendance(freeTalks, sessionChar);
@@ -204,6 +204,7 @@ public class EnrollmentManager {
                 do  {
                     Workshop w = workshopList.get(workshopIndex);
                     if (!leftover.isStudentAlreadyInWorkshop(w)) {
+                        System.out.println("adding " + leftover.getName() + " to " + w.getName());
                         w.addAttendee(sessionChar, leftover);
                         leftover.setWorkshop(w, sessionChar);
                     }
@@ -215,7 +216,9 @@ public class EnrollmentManager {
             }
             //if the above code works correctly then this should remove them from the list.
             if (!leftover.isAvailable()) {
+                scheduledAttendees.add(leftover);
                 leftovers.remove(leftover);
+                System.out.println("removing leftover " + leftover.getName());
                 i--;
             }
         }
