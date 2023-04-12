@@ -2,11 +2,15 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+        for (WorkshopSessions w: WorkshopSessions.values()) {
+            System.out.println(w);
+        }
         final int NUMBER_OF_SIMULATIONS = 1;
         ArrayList<EnrollmentManager> enrollments = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_SIMULATIONS; i++) {
             EnrollmentManager e = new EnrollmentManager();
             e.importData("data/workshops.tsv", "data/attendees.tsv"); //file names here
+            e.scheduleEighthGraders(WorkshopSessions.A);
             e.selectWorkshopPreferencesForAttendees();
             //e.printWorkshopChoices();
             enrollments.add(e);
@@ -20,7 +24,7 @@ public class Main {
             e.convertWorkshopDataToCSV();
             e.convertLeftoverDataToCSV();
         } catch (Exception exception) {
-            System.out.println(exception);
+            //System.out.println(exception);
             exception.printStackTrace();
         }
     }
@@ -32,7 +36,7 @@ public class Main {
             enrollmentStandardDeviations[i] = enrollments.get(i).calculateStandardDeviationOfAttendance('A') + enrollments.get(i).calculateStandardDeviationOfAttendance('B');
         }
         int smallest = indexOfSmallest(enrollmentStandardDeviations);
-        System.out.println("Smallest I could find is " + enrollmentStandardDeviations[smallest] + " standard deviations.");
+        //System.out.println("Smallest I could find is " + enrollmentStandardDeviations[smallest] + " standard deviations.");
         return smallest;
     }
 
