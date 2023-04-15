@@ -5,6 +5,7 @@ public class Attendee {
     private final String name;
     private final int grade;
     private final String emailAddress;
+    //TODO: ADD REGEX TO FILTER OUT TEACHERS (NO NUMBERS BEFORE @ SIGN, STUDENTS HAVE 2 NUMS)
     private String[] workshopPreferences; //in order of preference
 
     private HashMap<WorkshopSessions, Workshop> workshops;
