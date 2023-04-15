@@ -140,6 +140,15 @@ public class EnrollmentManager {
         }
     }
 
+    public void scheduleEighthGraders(WorkshopSessions eighthGradeSession) {
+        for (Attendee a: attendeeList) {
+            if (a.getGrade() == 8) {
+                a.setWorkshop(WorkshopFactory.eighthGradeMeeting, WorkshopSessions.A);
+                WorkshopFactory.eighthGradeMeeting.addAttendee(WorkshopSessions.A, a);
+            }
+        }
+    }
+
     /*
     iterate through each Workshop
     for each workshop, form a list of attendees that have their first preference to be that workshop (may
@@ -157,14 +166,14 @@ public class EnrollmentManager {
                 for (WorkshopSessions sessionChar: availableSessions) {
                     ArrayList<Attendee> attendees;
                     attendees = getListOfAvailableAttendeesByPreference(workshop, sessionChar, preferenceLevel);
-                    System.out.println("Attendees who prefer " + workshop.getName() + " as preference " + preferenceLevel + " for session " + sessionChar.getChar() + ": " + attendees);
+                    //System.out.println("Attendees who prefer " + workshop.getName() + " as preference " + preferenceLevel + " for session " + sessionChar.getChar() + ": " + attendees);
                     for (int j = workshop.getNumberOfOpenSpots(sessionChar); j > 0; j--) {
                         if (attendees.size() > 0) {
                             Attendee randomAttendee = attendees.get(new Random().nextInt(attendees.size()));
                             workshop.addAttendee(sessionChar, randomAttendee);
                             randomAttendee.setWorkshop(workshop, sessionChar);
                             attendees.remove(randomAttendee);
-                            System.out.println("Attendee scheduled: "+ randomAttendee.getName() + " for " + workshop.getName() + " on " + sessionChar.getChar());
+                            //System.out.println("Attendee scheduled: "+ randomAttendee.getName() + " for " + workshop.getName() + " on " + sessionChar.getChar());
                             if (!randomAttendee.isAvailable()) {
                                 scheduledAttendees.add(randomAttendee);
                             }
@@ -272,7 +281,6 @@ public class EnrollmentManager {
     //Column I: Attendee's Workshop B description
     public void convertAttendeeDataToCSV() throws Exception {
         List<String[]> attendeeFinalData = new ArrayList<>();
-
         for (Attendee attendee : scheduledAttendees) {
             ArrayList<String> dataRow = new ArrayList<>();
             dataRow.add(attendee.getEmailAddress());

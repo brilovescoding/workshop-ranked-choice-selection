@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        final int NUMBER_OF_SIMULATIONS = 50;
+        final int NUMBER_OF_SIMULATIONS = 1;
         ArrayList<EnrollmentManager> enrollments = new ArrayList<>();
         for (int i = 0; i < NUMBER_OF_SIMULATIONS; i++) {
             EnrollmentManager e = new EnrollmentManager();
